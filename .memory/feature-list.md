@@ -71,18 +71,25 @@ this file reports what actually exists.
   per the `notifications.events` setting; v1 driver for both is `console.log` + audit trail (no
   provider wired yet).
 
-**Config/UI only — no adapter code exists** (weaker than the above; `docs/architecture.md` §7
-documents files/functions that were never written in this build):
-- **UddoktaPay** — `payments.uddoktapay.enabled/api_key/base_url` settings and the `uddoktapay`
-  `payment_method` enum value exist and appear in the UI (checkout, order forms, invoice print). There
-  is no `src/lib/payments/` directory, no `createCharge()`/`verifyByInvoice()` functions, and no
-  webhook route anywhere in `src/app/api`.
-- **FraudBD** — `fraud.enabled/provider/high_risk_action` settings exist and *are* enforced, but only
-  via the blocklist rule (see below). There is no `src/lib/fraud/` directory and no `checkPhone()` —
-  the third-party lookup itself was never implemented.
-- **api/webhooks/uddoktapay, api/webhooks/courier** — documented in `docs/architecture.md`'s route map;
-  do not exist. The only route under `src/app/api` is `api/export/[report]/route.ts` (CSV report
-  export).
+**Adapter + route stubs exist, not yet wired into flows** (CORRECTED after the Wave 4 integration
+pass built these; an earlier draft of this section — written mid-build, before that pass — said they
+didn't exist and that stale claim briefly leaked into `docs/saas-roadmap.md`/`operations.md`, now
+fixed. Ground truth verified on disk AND in git: `git ls-files 'src/app/api/*' 'src/lib/payments/*'
+'src/lib/fraud/*'`):
+- **UddoktaPay** — `src/lib/payments/uddoktapay.ts` EXISTS: `createCharge()`/`verifyByInvoice()` with
+  real checkout-v2/verify-payment request shapes, `ConfigRequiredError`-guarded on the
+  `payments.uddoktapay.*` settings. NOT yet wired: checkout never calls `createCharge()` (the method
+  shows a disabled state), and the webhook doesn't call the verify chokepoint (below).
+- **FraudBD** — `src/lib/fraud/provider.ts` EXISTS: `FraudProvider` contract +
+  `checkCustomerRisk(orgSettings, phone)` never-throws helper. The `fraudbd` adapter body itself
+  throws "not implemented" (no public API docs to code against), and checkout doesn't call
+  `checkCustomerRisk()` yet — live fraud enforcement is blocklist-only (see below).
+- **api/webhooks/uddoktapay** — EXISTS: verifies the `RT-UDDOKTAPAY-API-KEY` header against org
+  settings (org via `?org=` query param), 401 on mismatch, logs + 200 on match; TODO'd to call
+  `verifyPaymentAction` (the chokepoint) instead of log-and-ack.
+- **api/webhooks/courier** — EXISTS: resolves delivery by `tracking_code`, appends a
+  `delivery_events` note row only — deliberately does NOT mutate `deliveries.status` because there is
+  no per-courier signature verification yet (that hardening is `docs/saas-roadmap.md` Phase E).
 
 **Fraud that IS working today**: on storefront checkout, `src/modules/storefront/actions.ts` (~line
 239, 380) queries `blocklist` by phone/address, sets `risk_level='high'` on a match, and applies the
@@ -131,4 +138,5 @@ FraudBD-based.
   wildcard-DNS + middleware host-mapping is a documented next-step (see `docs/deployment.md`), not
   built.
 - **App marketplace** — spec Integrations "Advanced" tier; not started — no public API, webhooks
-  surface, or app-install flow exists (the two internal webhook routes above were never built either).
+  surface, or app-install flow exists (the two internal webhook routes above are unauthenticated-
+  inbound stubs, not a public API surface).

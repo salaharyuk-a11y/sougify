@@ -54,6 +54,9 @@ else moves. To add a new module: add its key to the `ModuleKey` union (`src/modu
 for the binding contract.
 
 ## Where to look next
+- `docs/saas-roadmap.md` — canonical plan for SaaS/platform work (plans, billing, platform ops, custom
+  domains, production trust, scale-outs) — phased and effort-tagged.
+- `docs/operations.md` — production runbook. `docs/extending.md` — dev recipes (modules/blocks/etc.).
 - `docs/architecture.md` — full binding contract (routes, schema, settings, payments/fraud, couriers,
   receipts, what's stubbed vs. working).
 - `docs/conventions.md` — binding build conventions (data access, server actions, money/dates, UI).

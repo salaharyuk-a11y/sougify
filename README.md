@@ -70,6 +70,9 @@ docs/             architecture.md, conventions.md, design-system.md, deployment.
 - `docs/conventions.md` — binding build conventions.
 - `docs/design-system.md` — design tokens and aesthetic.
 - `docs/deployment.md` — Vercel + Supabase deploy steps.
+- `docs/saas-roadmap.md` — template → commercial SaaS conversion plan (phased, effort-tagged).
+- `docs/operations.md` — production runbook (migrations, tenant lifecycle, backups, incidents).
+- `docs/extending.md` — developer guide: codebase tour + recipes for modules/blocks/verticals/adapters.
 - `.memory/` — shared project memory: context, feature list, next steps, decisions, build log.
 
 ## License

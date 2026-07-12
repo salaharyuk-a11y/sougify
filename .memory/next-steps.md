@@ -1,5 +1,9 @@
 # Scarpar — Next Steps (ordered)
 
+> SaaS/platform work (billing, plans, custom domains, platform ops, production trust) now has its own
+> canonical, phased plan: `docs/saas-roadmap.md`. §1-5 below remain the immediate wiring steps for the
+> template itself — do the roadmap once this repo is carrying a real org, not before.
+
 ## 1. Connect a Supabase project
 1. Create a project at supabase.com.
 2. SQL Editor → paste and run, **in order** (each depends on the previous): `supabase/migrations/

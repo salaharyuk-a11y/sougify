@@ -10,6 +10,10 @@ Multi-tenant, module-based CMS + commerce + business-management platform for Ban
 - `docs/conventions.md` — data access, server actions, money/dates, UI patterns.
 - `docs/design-system.md` — tokens + aesthetic.
 
+Working guides: `docs/extending.md` (add a module/block/vertical/adapter — copy the named smallest
+example), `docs/operations.md` (production runbook), `docs/saas-roadmap.md` (phased template→SaaS
+plan — canonical for billing/plans/domains/platform work), `docs/deployment.md` (Vercel+Supabase).
+
 ## Key invariants
 - Money = bigint paisa everywhere. Format with `formatMoney()` (`src/lib/money.ts`); never float taka.
 - `verifyPayment()` (`src/modules/orders/actions.ts`) is the ONLY path that flips a payment to

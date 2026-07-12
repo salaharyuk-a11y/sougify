@@ -125,6 +125,17 @@
 - `scarpar-builder` Claude Code skill written + installed (~/.claude/skills/scarpar-builder/),
   skill_lint clean. NEW/INTEGRATE/EXTEND/OPERATE modes; repo docs remain the single source of truth.
 - codegraph init completed (exit 0). next-steps.md §6/§7 closed out.
+- SaaS documentation pass: docs/saas-roadmap.md (6 phases A-F, effort-tagged, anchored to existing
+  hooks: orgs.plan, platform_admins, settings engine), docs/operations.md (prod runbook: migration
+  discipline 0005+, tenant lifecycle incl. precise is_active semantics — app-gate not RLS-boundary,
+  backups, incidents), docs/extending.md (repo-local recipes w/ smallest-example pointers), README/
+  project-context/next-steps pointers, CLAUDE.md working-guides block.
+- CORRECTION (orchestrator-verified): feature-list.md's "UddoktaPay/FraudBD/webhook routes don't
+  exist" section was stale (written mid-build, before Wave 4's addendum created them) and leaked
+  into the new roadmap/operations docs. Verified on disk + git ls-files: src/lib/payments/
+  uddoktapay.ts, src/lib/fraud/provider.ts, api/webhooks/{uddoktapay,courier} ALL exist as guarded
+  stubs. All three docs corrected to "exists, not yet wired into flows". Lesson recorded: Windows
+  Glob false-negatives — always confirm absence via PowerShell/git ls-files before documenting it.
 
 - Ops note: a broad `Stop-Process`/WMI command-line filter (`*scarpar*dev*`) self-matched its own
   wrapper shell's command line and killed several unrelated bash/powershell wrapper processes
