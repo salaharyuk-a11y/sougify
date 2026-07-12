@@ -14,15 +14,29 @@
 
 # Scarpar
 
-**Open-source, multi-tenant, module-based CMS, commerce, and business-management platform.** One
-deployment serves many independent organizations, each toggling the modules it needs and picking a
-vertical preset — ecommerce, courses, services, or real estate — instead of forking the codebase per
-business type.
+**Scarpar is a free, open-source, self-hosted CMS, ecommerce, and business-management platform
+built on Next.js and Supabase** — a multi-tenant alternative to Shopify, Medusa, and Payload for
+running many independent businesses from one deployment.
 
-It's built specifically for Bangladeshi businesses: cash-on-delivery and manual bKash/Nagad
-verification as first-class payment paths, district-based delivery zones with local courier support
-(Steadfast, Pathao), Mushak 6.3-compliant invoices for VAT-registered sellers, and Bangla-ready
-storefront copy — the parts a generic Shopify/Medusa-style platform doesn't handle out of the box.
+Each organization toggles the modules it needs and picks a vertical preset — ecommerce, courses,
+services, or real estate — instead of forking the codebase per business type. It's a practical base
+for a SaaS starter, an agency's reusable per-client platform, or a single self-hosted store.
+
+It also ships a deep Bangladesh-market layer most generic platforms skip: cash-on-delivery and
+manual bKash/Nagad verification as first-class payment paths, district-based delivery zones with
+local courier support (Steadfast, Pathao), Mushak 6.3-compliant invoices for VAT-registered
+sellers, and Bangla-ready storefront copy.
+
+## Who it's for
+
+- **Developers** who want a working multi-tenant SaaS starter on Next.js + Supabase instead of
+  building the org/module/RLS scaffolding from scratch.
+- **Agencies** that build ecommerce or CMS sites for multiple clients and want one reusable,
+  self-hosted codebase instead of a per-client rebuild.
+- **Bangladeshi businesses and developers** who need COD, local courier delivery, and Mushak-
+  compliant invoicing out of the box, not bolted on.
+- **Anyone evaluating a self-hosted Shopify, Medusa, or Payload alternative** with commerce, CMS,
+  and delivery management already wired together.
 
 ## Feature highlights
 
@@ -88,6 +102,7 @@ docs/             architecture.md, conventions.md, design-system.md, deployment.
 - `docs/operations.md` — production runbook (migrations, tenant lifecycle, backups, incidents).
 - `docs/extending.md` — developer guide: codebase tour + recipes for modules/blocks/verticals/adapters.
 - `.memory/` — shared project memory: context, feature list, next steps, decisions, build log.
+- [`CHANGELOG.md`](CHANGELOG.md) — release history.
 
 ## Contributing
 
