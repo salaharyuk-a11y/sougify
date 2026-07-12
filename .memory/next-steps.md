@@ -71,11 +71,14 @@ In priority order, by leverage vs. effort:
 - Test framework — none exists yet (decisions #11); `tsc --noEmit` + `next build` are the only quality
   gates today. Add one before this grows past template stage.
 
-## 6. Optional: package as a Claude Code skill
-A scaffold-from-template playbook (spin up a new Scarpar-based project from this repo) was deliberately
-deferred this session for budget (decisions.md #20). Revisit only if there's a real need to generate
-multiple Scarpar-derived projects.
+## 6. Claude Code skill — DONE (2026-07-12, same session)
+`scarpar-builder` installed at `~/.claude/skills/scarpar-builder/` (lint 0 ERROR / 0 WARN). Four
+modes: NEW (clone template), INTEGRATE (copy-in playbook for existing Next.js sites — merge points:
+middleware, root layout, globals tokens, deps, migrations w/ collision check), EXTEND (module /
+CMS-block / vertical / adapter recipes), OPERATE (Supabase wiring + /ship deploy runbook). It
+defers to this repo's docs/ as ground truth. Triggers on "scarpar", new BD-client builds, or any
+session inside a Scarpar-derived repo.
 
-## 7. Codegraph
-No `.codegraph/` directory exists in this repo yet. Run `codegraph init -i` before starting real
-feature work here, per the workspace's standing rule for subprojects with real code.
+## 7. Codegraph — DONE (2026-07-12, same session)
+`codegraph init` ran clean (exit 0); `.codegraph/` exists (gitignored). Use `codegraph explore`
+for structure questions here.

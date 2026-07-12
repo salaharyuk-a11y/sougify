@@ -108,6 +108,24 @@
   above), dev server boot on the launch.json `scarpar` entry (port 3600) + curl: `/` 307→/admin,
   `/login` 200, `/track` 200, `/s/demo` 404 (graceful, placeholder creds), `/reset-password` 200,
   `/s/demo/about` 404 (graceful), both webhooks respond without crashing. Server killed after.
+- Ops note (Wave 4): the broad `Stop-Process` filter quirk recorded below belongs to the
+  integration pass, not finalization.
+
+## Wave 5 — Finalization (orchestrator)
+- DOCS slice: project-context/feature-list/next-steps + README/CLAUDE.md/deployment.md written,
+  ground-truthed against the codebase (caught the missing payment/fraud adapter files → fed back
+  into Q1's addendum).
+- Orchestrator ground-truth verify: `npx tsc --noEmit` exit 0 + `npm run build` full route table,
+  run directly (not scout-reported).
+- Git: init master, local author sahol3 (Vercel rule), commit 1923b7d — 421 files, tree clean.
+- codegraph init started. Build totals: 25 subagent slices across 5 waves, zero file-ownership
+  collisions, 2 cross-slice contract stubs (create-order, media-picker) both honored.
+
+## Wave 6 — Post-handback (same session, user follow-up)
+- `scarpar-builder` Claude Code skill written + installed (~/.claude/skills/scarpar-builder/),
+  skill_lint clean. NEW/INTEGRATE/EXTEND/OPERATE modes; repo docs remain the single source of truth.
+- codegraph init completed (exit 0). next-steps.md §6/§7 closed out.
+
 - Ops note: a broad `Stop-Process`/WMI command-line filter (`*scarpar*dev*`) self-matched its own
   wrapper shell's command line and killed several unrelated bash/powershell wrapper processes
   (same root cause as the documented `pkill -f` self-match quirk) — the actual dev-server PID was
