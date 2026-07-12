@@ -1,7 +1,35 @@
 {
   "name": "scarpar",
-  "private": true,
   "version": "0.1.0",
+  "description": "Open-source, multi-tenant, module-based CMS + commerce + business-management platform. Next.js 15 + Supabase. Ecommerce, courses, services, and real-estate verticals from one codebase.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sahol3/scarpar.git"
+  },
+  "homepage": "https://github.com/sahol3/scarpar#readme",
+  "bugs": {
+    "url": "https://github.com/sahol3/scarpar/issues"
+  },
+  "keywords": [
+    "nextjs",
+    "supabase",
+    "cms",
+    "ecommerce",
+    "multi-tenant",
+    "saas-starter",
+    "saas-template",
+    "typescript",
+    "tailwindcss",
+    "open-source",
+    "postgres",
+    "row-level-security",
+    "pos",
+    "delivery-management",
+    "headless-cms",
+    "react"
+  ],
+  "private": false,
   "scripts": {
     "dev": "next dev",
     "build": "next build",

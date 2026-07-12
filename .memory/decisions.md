@@ -44,3 +44,15 @@
     cart/B2B/Meilisearch/multi-warehouse deferred — spec tiers them S/N/A; Core tier ships.
 20. **Claude Code skill packaging deferred unless end-of-build budget allows** — working repo is the
     deliverable per the directive; a template-scaffolding skill is a thin wrapper to add later.
+21. **Open-sourced under MIT (2026-07-12), superseding the earlier "Proprietary — Elite Heights"
+    README line.** User explicitly directed publishing this as a public open-source project.
+    MIT over a copyleft license (e.g. AGPL, used by some self-hostable-SaaS peers to deter
+    unmodified commercial re-hosting) because the user's stated goal was maximizing findability
+    and adoption ("so people rlly find and use this") — copyleft is real friction for corporate
+    adopters. Low-cost to revisit: zero external contributors exist yet, so no CLA/relicensing
+    complexity if this needs to change before the project gains outside contributors.
+22. **Local git history squashed to one clean initial commit before the first public push**
+    (2026-07-12), removing internal build-process commit messages and AI co-author trailers from
+    the public record. Safe because no remote existed yet — nothing pushed, nothing rewritten that
+    was ever shared. Full build narrative is preserved in `.memory/logs.md`, which ships in the
+    repo; only the git commit history itself was condensed.

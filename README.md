@@ -1,6 +1,20 @@
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="brand/wordmark-dark.svg">
+    <img src="brand/wordmark-light.svg" alt="Scarpar" height="72">
+  </picture>
+</p>
+
+<p align="center">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-black.svg"></a>
+  <img alt="Next.js 15" src="https://img.shields.io/badge/Next.js-15-black.svg">
+  <img alt="Supabase" src="https://img.shields.io/badge/Supabase-Postgres%20%2B%20Auth%20%2B%20RLS-black.svg">
+  <a href="CONTRIBUTING.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-black.svg"></a>
+</p>
+
 # Scarpar
 
-Scarpar is a multi-tenant, module-based CMS, commerce, and business-management platform. One
+**Open-source, multi-tenant, module-based CMS, commerce, and business-management platform.** One
 deployment serves many independent organizations, each toggling the modules it needs and picking a
 vertical preset — ecommerce, courses, services, or real estate — instead of forking the codebase per
 business type.
@@ -75,6 +89,14 @@ docs/             architecture.md, conventions.md, design-system.md, deployment.
 - `docs/extending.md` — developer guide: codebase tour + recipes for modules/blocks/verticals/adapters.
 - `.memory/` — shared project memory: context, feature list, next steps, decisions, build log.
 
+## Contributing
+
+Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for the workflow and
+[`docs/extending.md`](docs/extending.md) for step-by-step recipes (add a module, CMS block,
+vertical, or courier/payment adapter). This project follows the
+[Contributor Covenant](CODE_OF_CONDUCT.md).
+
 ## License
 
-Proprietary — Elite Heights.
+[MIT](LICENSE) — free to use, modify, and self-host, including commercially. No attribution required
+(though a star is always appreciated).
