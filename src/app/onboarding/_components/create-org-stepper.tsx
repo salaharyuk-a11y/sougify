@@ -96,7 +96,7 @@ export function CreateOrgStepper({ heading }: CreateOrgStepperProps) {
                     <FormLabel>Organization name</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="e.g. Nafcy Perfumes"
+                        placeholder="e.g. Harbour Perfumes"
                         {...field}
                         onChange={(e) => {
                           field.onChange(e)
@@ -119,7 +119,7 @@ export function CreateOrgStepper({ heading }: CreateOrgStepperProps) {
                     <FormLabel>URL slug</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="nafcy-perfumes"
+                        placeholder="harbour-perfumes"
                         {...field}
                         onChange={(e) => {
                           setSlugTouched(true)
