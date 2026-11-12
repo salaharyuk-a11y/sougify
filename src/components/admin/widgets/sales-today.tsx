@@ -43,23 +43,23 @@ export async function SalesTodayWidget() {
   }
 
   return (
-    <Card className="gap-3 p-4">
+    <Card dir="rtl" className="gap-3 p-4">
       <div className="flex items-center justify-between">
-        <span className="text-[12px] font-medium text-muted-foreground">Sales Today</span>
+        <span className="text-[12px] font-medium text-muted-foreground">مبيعات اليوم</span>
         <TrendingUp className="size-4 text-muted-foreground" />
       </div>
 
       <div className="flex flex-col gap-2">
-        <StatRow label="Revenue" value={formatCompact(revenue, { symbol: true })} first />
-        <StatRow label="Orders" value={String(orderCount)} />
-        <StatRow label="Pending" value={String(pendingCount)} />
+        <StatRow label="الإيرادات" value={formatCompact(revenue, { symbol: true })} first />
+        <StatRow label="الطلبات" value={String(orderCount)} />
+        <StatRow label="قيد الانتظار" value={String(pendingCount)} />
       </div>
 
       <Link
         href="/admin/orders"
         className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
       >
-        View orders <ArrowRight className="size-3" />
+        عرض الطلبات <ArrowRight className="size-3 rotate-180" />
       </Link>
     </Card>
   )
