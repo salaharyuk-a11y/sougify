@@ -38,24 +38,24 @@ export async function OrdersRecentWidget() {
   }
 
   return (
-    <Card className="gap-3 p-4">
+    <Card dir="rtl" className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Recent Orders</CardTitle>
+        <CardTitle className="text-[13px]">أحدث الطلبات</CardTitle>
         <Link href="/admin/orders" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {orders.length === 0 ? (
-          <EmptyState icon={ShoppingCart} title="No orders yet" className="py-8" />
+          <EmptyState icon={ShoppingCart} title="لا توجد طلبات بعد" className="py-8" />
         ) : (
           <Table>
             <TableHeader>
               <TableRow>
-                <TableHead>Order</TableHead>
-                <TableHead>Customer</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead className="text-right">Total</TableHead>
+                <TableHead>رقم الطلب</TableHead>
+                <TableHead>العميل</TableHead>
+                <TableHead>الحالة</TableHead>
+                <TableHead className="text-left">الإجمالي</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -70,7 +70,7 @@ export async function OrdersRecentWidget() {
                   <TableCell>
                     <StatusBadge kind="order" value={order.status} />
                   </TableCell>
-                  <TableCell className="text-right tabular-nums">{formatMoney(order.total)}</TableCell>
+                  <TableCell className="text-left tabular-nums">{formatMoney(order.total)}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
