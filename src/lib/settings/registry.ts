@@ -1,7 +1,7 @@
 // Sougify settings registry — Algeria-first defaults and labels.
 import type { Role } from '@/types/db'
 
-export type SettingType = 'boolean' | 'number' | 'text' | 'select' | 'json'
+export type SettingType = 'boolean' | 'number' | 'text' | 'select' | 'json' | 'info'
 export type SettingGroup =
   | 'checkout' | 'payments' | 'delivery' | 'fraud' | 'inventory'
   | 'notifications' | 'tax' | 'localization' | 'printing' | 'storefront'
@@ -27,18 +27,13 @@ export const SETTING_DEFS: SettingDef[] = [
   { key: 'checkout.guest_enabled', group: 'checkout', label: 'السماح بالشراء دون حساب', type: 'boolean', default: true },
   { key: 'checkout.min_order', group: 'checkout', label: 'الحد الأدنى للطلب (دج)', type: 'number', help: 'اترك القيمة 0 لتعطيل الحد الأدنى', default: 0 },
 
-  { key: 'payments.cod_enabled', group: 'payments', label: 'تفعيل الدفع عند الاستلام', type: 'boolean', default: true },
-  { key: 'payments.advance_required', group: 'payments', label: 'اشتراط دفع مسبق', type: 'boolean', default: false },
-  { key: 'payments.advance_amount', group: 'payments', label: 'مبلغ التسبيق (دج)', type: 'number', help: 'يُستخدم عندما يكون نوع التسبيق مبلغاً ثابتاً', default: 0 },
   {
-    key: 'payments.advance_type', group: 'payments', label: 'طريقة احتساب التسبيق', type: 'select',
-    options: [{ value: 'fixed', label: 'مبلغ ثابت' }, { value: 'percent', label: 'نسبة من الإجمالي' }],
-    default: 'fixed',
-  },
-  {
-    key: 'payments.methods', group: 'payments', label: 'طرق الدفع المتاحة', type: 'json',
-    help: 'في الوقت الحالي، الدفع عند الاستلام هو الخيار المفعّل افتراضياً. لا تضف مزود دفع قبل ربطه واختباره.',
-    default: ['cod'],
+    key: 'payments.availability',
+    group: 'payments',
+    label: 'وسيلة الدفع المتاحة حالياً',
+    help: 'نعتمد الدفع عند الاستلام في النسخة الحالية. سيتم إضافة وسائل الدفع الإلكتروني بعد ربط مزود محلي موثوق واختباره.',
+    type: 'info',
+    default: 'الدفع عند الاستلام (COD)',
   },
 
   { key: 'delivery.default_zone_fallback', group: 'delivery', label: 'سعر التوصيل الافتراضي (دج)', type: 'number', help: 'يُستخدم عندما لا توجد منطقة توصيل مطابقة', default: 0 },
