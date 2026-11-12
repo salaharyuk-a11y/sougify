@@ -89,9 +89,9 @@ function renderWidget(id: DashboardWidgetId): ReactNode {
 }
 
 function greetingFor(hour: number): string {
-  if (hour < 12) return 'Good morning'
-  if (hour < 17) return 'Good afternoon'
-  return 'Good evening'
+  if (hour < 12) return 'صباح الخير'
+  if (hour < 17) return 'مساء الخير'
+  return 'مساء الخير'
 }
 
 export default async function AdminDashboardPage() {
@@ -116,10 +116,10 @@ export default async function AdminDashboardPage() {
   const orderedIds = DISPLAY_ORDER.filter((id) => enabledWidgetIds.includes(id))
 
   const greeting = greetingFor(new Date().getHours())
-  const today = format(new Date(), 'EEEE, d MMMM yyyy')
+  const today = new Intl.DateTimeFormat('ar-DZ', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date())
 
   return (
-    <div className="flex flex-col gap-6">
+    <div dir="rtl" className="flex flex-col gap-6">
       <div className="flex flex-col gap-1">
         <h1 className="text-[20px] font-semibold tracking-tight text-foreground">
           {greeting}, {firstName}
@@ -130,8 +130,8 @@ export default async function AdminDashboardPage() {
       {orderedIds.length === 0 ? (
         <EmptyState
           icon={LayoutDashboard}
-          title="No widgets to show"
-          description="Enable a module in Settings to see data here."
+          title="لا توجد مؤشرات لعرضها"
+          description="فعّل وحدة من الإعدادات لعرض بياناتها هنا."
         />
       ) : (
         <div className="grid grid-cols-12 gap-4">
