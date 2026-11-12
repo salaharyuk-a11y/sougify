@@ -77,7 +77,19 @@ function DashboardVisual() {
           <aside className="border-r border-[#E9EEE8] bg-[#FAFCF9] p-3 sm:p-4" dir="rtl">
             <div className="mb-7 flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-lg bg-[#174D3A] text-white"><ShoppingBag size={13}/></span><b className="text-[11px] text-[#233B2D]">Sougify</b></div>
             <p className="mb-2 px-2 text-[8px] font-bold text-[#A0AAA1]">القائمة الرئيسية</p>
-            {[[LayoutDashboard,"لوحة التحكم",true],[ClipboardList,"الطلبات",false],[Package,"المنتجات",false],[Boxes,"المخزون",false],[Truck,"التوصيل",false],[BarChart3,"التقارير",false]].map(([Icon,label,active])=><div key={label as string} className={`mb-1 flex items-center gap-2 rounded-lg px-2 py-2.5 text-[8px] font-semibold sm:text-[9px] ${active?"bg-[#EAF2EB] text-[#225A3F]":"text-[#839087]"}`}><Icon size={13}/>{label as string}</div>)}
+            {[
+              { icon: LayoutDashboard, label: "لوحة التحكم", active: true },
+              { icon: ClipboardList, label: "الطلبات", active: false },
+              { icon: Package, label: "المنتجات", active: false },
+              { icon: Boxes, label: "المخزون", active: false },
+              { icon: Truck, label: "التوصيل", active: false },
+              { icon: BarChart3, label: "التقارير", active: false },
+            ].map(({ icon: Icon, label, active }) => (
+              <div key={label} className={`mb-1 flex items-center gap-2 rounded-lg px-2 py-2.5 text-[8px] font-semibold sm:text-[9px] ${active ? "bg-[#EAF2EB] text-[#225A3F]" : "text-[#839087]"}`}>
+                <Icon size={13} />
+                {label}
+              </div>
+            ))}
             <div className="mt-8 border-t border-[#E9EEE8] pt-4"><p className="mb-3 text-[8px] font-bold text-[#A0AAA1]">المتجر</p><div className="flex items-center gap-2 text-[8px] text-[#839087]"><Globe2 size={12}/> إعدادات المتجر</div></div>
             <div className="mt-16 rounded-xl bg-[#174D3A] p-3 text-white"><Sparkles size={15}/><p className="mt-3 text-[9px] font-bold">مساحة واحدة</p><p className="mt-1 text-[8px] leading-5 text-[#D2E5D8]">لتفاصيل تجارتك اليومية</p></div>
           </aside>
