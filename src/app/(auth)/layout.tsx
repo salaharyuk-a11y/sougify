@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
         href="/login"
         className="text-xl font-semibold tracking-tight text-foreground"
       >
-        Scarpar
+        Sougify
       </Link>
       <div className="w-full max-w-sm">{children}</div>
     </div>

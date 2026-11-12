@@ -63,7 +63,7 @@ export function SignupForm({ next }: SignupFormProps) {
     <Card>
       <CardHeader>
         <CardTitle className="text-lg">Create your account</CardTitle>
-        <CardDescription>Set up Scarpar for your business in a couple of minutes.</CardDescription>
+        <CardDescription>Set up Sougify for your business in a couple of minutes.</CardDescription>
       </CardHeader>
       <CardContent className="pb-4">
         <Form {...form}>
