@@ -1,645 +1,159 @@
+"use client";
 
 import Link from "next/link";
 import {
-  ArrowLeft,
-  ArrowUpLeft,
-  BarChart3,
-  Boxes,
-  Check,
-  ChevronDown,
-  ClipboardList,
-  Globe2,
-  LayoutDashboard,
-  Package,
-  ShieldCheck,
-  ShoppingBag,
-  Store,
-  Truck,
-  Wallet,
-  Zap,
+  ArrowLeft, ArrowUpLeft, BarChart3, Bell, Boxes, Check, ChevronDown,
+  ClipboardList, Globe2, LayoutDashboard, Menu, Package, Search, Settings2,
+  ShieldCheck, ShoppingBag, Sparkles, Truck, Wallet, X,
 } from "lucide-react";
+import { useState } from "react";
 
 const features = [
-  {
-    icon: ShoppingBag,
-    number: "01",
-    title: "المتجر الإلكتروني",
-    description:
-      "اعرض منتجاتك ونظّم تصنيفاتك وأسعارك، وامنح عملاءك تجربة تسوق واضحة وسهلة.",
-  },
-  {
-    icon: ClipboardList,
-    number: "02",
-    title: "إدارة الطلبات",
-    description:
-      "اجمع طلباتك في مكان واحد وتابع مراحل تجهيزها ومعالجتها وتسليمها.",
-  },
-  {
-    icon: Boxes,
-    number: "03",
-    title: "المخزون والمنتجات",
-    description:
-      "راقب حركة منتجاتك والكميات المتاحة، وحافظ على تنظيم مخزونك.",
-  },
-  {
-    icon: Truck,
-    number: "04",
-    title: "الشحن والتوصيل",
-    description:
-      "نظّم عمليات التوصيل وتابع حالة الشحنات والطلبات المرسلة.",
-  },
-  {
-    icon: Wallet,
-    number: "05",
-    title: "الدفع عند الاستلام",
-    description:
-      "تابع المبالغ المحصلة والمستحقة وسجّل عمليات الدفع المرتبطة بطلباتك.",
-  },
-  {
-    icon: BarChart3,
-    number: "06",
-    title: "التقارير والأداء",
-    description:
-      "افهم أداء نشاطك من خلال بيانات المبيعات والطلبات وحركة المنتجات.",
-  },
+  { icon: ShoppingBag, no: "01", title: "متجرك في الواجهة", desc: "اعرض منتجاتك بطريقة مرتبة واجعل تجربة الشراء واضحة من أول زيارة." },
+  { icon: ClipboardList, no: "02", title: "الطلبات تحت السيطرة", desc: "تابع الطلبات وحالاتها من الاستقبال إلى التجهيز والتسليم." },
+  { icon: Boxes, no: "03", title: "مخزون أكثر تنظيماً", desc: "راقب الكميات المتاحة وتعرّف على المنتجات التي تحتاج إلى متابعة." },
+  { icon: Truck, no: "04", title: "متابعة التوصيل", desc: "اجمع تفاصيل الشحن والطلبات المرسلة في مساحة واحدة." },
+  { icon: Wallet, no: "05", title: "الدفع عند الاستلام", desc: "نظّم مبالغ الطلبات وسجّل حالة التحصيل بوضوح." },
+  { icon: BarChart3, no: "06", title: "قراءة أداء نشاطك", desc: "شاهد مؤشرات نشاطك التجاري واتخذ قرارات مبنية على بياناتك." },
 ];
 
-const workflow = [
-  {
-    number: "01",
-    title: "أنشئ مساحة عملك",
-    description:
-      "ابدأ بإنشاء حسابك وحدد طبيعة نشاطك التجاري لإعداد بيئة العمل.",
-  },
-  {
-    number: "02",
-    title: "نظّم عملياتك",
-    description:
-      "أضف المنتجات ونظّم المخزون واضبط طريقة استقبال الطلبات.",
-  },
-  {
-    number: "03",
-    title: "تابع كل شيء",
-    description:
-      "راقب الطلبات والمبيعات والتوصيل من لوحة تحكم موحدة.",
-  },
+const steps = [
+  ["01", "جهّز مساحة عملك", "أنشئ حسابك وأضف المعلومات الأساسية لنشاطك التجاري."],
+  ["02", "أضف منتجاتك", "رتّب المنتجات والأسعار والمخزون في مكان واحد."],
+  ["03", "تابع عملياتك", "استقبل الطلبات وراقب مراحل معالجتها من لوحة التحكم."],
 ];
 
-function Brand() {
+const orders = [
+  { id: "#SO-1048", customer: "محمد ب.", item: "سماعات لاسلكية", amount: "4,500 دج", status: "طلب جديد", tone: "green" },
+  { id: "#SO-1047", customer: "سارة ك.", item: "حقيبة يومية", amount: "3,200 دج", status: "قيد التجهيز", tone: "amber" },
+  { id: "#SO-1046", customer: "ياسين م.", item: "مصباح مكتبي", amount: "2,800 دج", status: "تم التأكيد", tone: "blue" },
+];
+
+function Brand({ light = false }: { light?: boolean }) {
   return (
-    <Link href="/" className="flex items-center gap-2.5">
-      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#174D3A] text-xl font-black text-white">
-        S
-      </div>
-      <span className="text-[23px] font-extrabold tracking-[-1px] text-[#172D25]">
-        Sougi<span className="text-[#398064]">fy</span>
+    <Link href="/" aria-label="Sougify الصفحة الرئيسية" className="inline-flex items-center gap-2.5">
+      <span className={`grid h-10 w-10 place-items-center rounded-[13px] ${light ? "bg-white text-[#164C38]" : "bg-[#174D3A] text-white"}`}>
+        <ShoppingBag size={19} strokeWidth={2.3} />
+      </span>
+      <span className={`text-[23px] font-extrabold tracking-[-1.1px] ${light ? "text-white" : "text-[#172D25]"}`}>
+        Sougi<span className={light ? "text-[#B9DCC5]" : "text-[#398064]"}>fy</span>
       </span>
     </Link>
   );
 }
 
-function SectionTitle({
-  label,
-  title,
-  description,
-}: {
-  label: string;
-  title: string;
-  description: string;
-}) {
+function DashboardVisual() {
   return (
-    <div className="max-w-2xl">
-      <span className="text-xs font-bold tracking-wide text-[#398064]">
-        {label}
-      </span>
-      <h2 className="mt-4 text-3xl font-extrabold leading-[1.4] tracking-tight text-[#172D25] md:text-[42px]">
-        {title}
-      </h2>
-      <p className="mt-5 text-sm leading-8 text-[#737D76] md:text-base">
-        {description}
-      </p>
-    </div>
-  );
-}
-
-function DashboardPreview() {
-  return (
-    <div className="relative mx-auto w-full max-w-[650px]">
-      <div className="absolute -left-8 -top-8 h-40 w-40 rounded-full bg-[#DCEBE1] blur-3xl" />
-
-      <div className="relative overflow-hidden rounded-[18px] border border-[#E3E8E2] bg-white shadow-[0_30px_90px_-35px_rgba(27,61,43,0.23)]">
-        {/* Browser bar */}
-        <div className="flex h-12 items-center justify-between border-b border-[#EDF0EB] bg-[#FAFBF9] px-4">
-          <div className="flex gap-1.5">
-            <span className="h-2.5 w-2.5 rounded-full bg-[#E5B9AE]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#E8D5A2]" />
-            <span className="h-2.5 w-2.5 rounded-full bg-[#B5CEB9]" />
-          </div>
-          <span className="text-[9px] font-medium text-[#A0AAA2]">
-            app.sougify.com
-          </span>
-          <Globe2 size={13} className="text-[#9CA69E]" />
+    <div className="sougify-visual relative mx-auto w-full max-w-[760px]" dir="rtl">
+      <div className="absolute -inset-8 rounded-[50%] bg-[#B9D8C1]/35 blur-[75px]" />
+      <div className="sougify-dashboard relative overflow-hidden rounded-[23px] border border-[#E4EAE3] bg-white shadow-[0_35px_100px_-35px_rgba(17,55,37,.34)]">
+        <div className="flex h-12 items-center justify-between border-b border-[#EEF1ED] bg-[#FBFCFA] px-4">
+          <div className="flex items-center gap-2"><span className="h-2.5 w-2.5 rounded-full bg-[#E7B7AC]" /><span className="h-2.5 w-2.5 rounded-full bg-[#E9D49A]" /><span className="h-2.5 w-2.5 rounded-full bg-[#B9D1B9]" /></div>
+          <div className="flex items-center gap-2 rounded-md border border-[#E9EDE8] bg-white px-3 py-1 text-[9px] text-[#7B897E]"><ShieldCheck size={11} /> app.sougify.com</div>
+          <span className="text-[9px] font-semibold text-[#87948A]">معاينة المنصة</span>
         </div>
-
-        <div className="grid grid-cols-[1fr_150px] sm:grid-cols-[1fr_175px]" dir="ltr">
-          {/* Main dashboard */}
+        <div className="grid min-h-[430px] grid-cols-[minmax(0,1fr)_148px] sm:grid-cols-[minmax(0,1fr)_182px]" dir="ltr">
           <div className="min-w-0 p-4 sm:p-6" dir="rtl">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-[9px] text-[#929D95]">
-                  مساحة العمل / الرئيسية
-                </p>
-                <h3 className="mt-2 text-base font-extrabold text-[#20372C] sm:text-xl">
-                  نظرة عامة
-                </h3>
-              </div>
-              <div className="rounded-lg border border-[#E7ECE6] px-2 py-1.5 text-[9px] text-[#66766A]">
-                آخر 30 يوماً
-              </div>
+            <div className="flex items-start justify-between gap-3">
+              <div><p className="text-[9px] text-[#98A39A]">مساحة العمل / الرئيسية</p><h3 className="mt-1.5 text-[18px] font-extrabold text-[#1D3528]">صباح الخير 👋</h3><p className="mt-1 text-[10px] text-[#87938A]">إليك ملخص نشاط متجرك اليوم</p></div>
+              <button className="relative rounded-xl border border-[#E9EEE8] p-2 text-[#6F7F73]" aria-label="الإشعارات"><Bell size={15}/><i className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-[#E18B63]"/></button>
             </div>
-
-            {/* Summary */}
-            <div className="mt-6 grid grid-cols-2 gap-2 sm:grid-cols-3">
-              {[
-                { label: "إجمالي الطلبات", value: "128", icon: ClipboardList },
-                { label: "المنتجات", value: "64", icon: Package },
-                { label: "قيد المعالجة", value: "12", icon: Truck },
-              ].map((item) => (
-                <div
-                  key={item.label}
-                  className="rounded-xl border border-[#E9EEE8] bg-[#FCFDFC] p-3"
-                >
-                  <item.icon size={15} className="text-[#398064]" />
-                  <p className="mt-4 text-[9px] text-[#87938A]">
-                    {item.label}
-                  </p>
-                  <p className="mt-1 text-xl font-extrabold text-[#20372C]">
-                    {item.value}
-                  </p>
-                </div>
-              ))}
+            <div className="mt-5 grid grid-cols-3 gap-2.5">
+              {[["إجمالي الطلبات","248","+12.8%"],["قيمة المبيعات","186,400","دج"],["منتجات نشطة","64","منتج"]].map(([label,value,sub],i)=><div key={label} className="rounded-[13px] border border-[#E9EEE8] bg-[#FEFFFE] p-2.5 sm:p-3.5"><span className="text-[8px] text-[#89958B] sm:text-[9px]">{label}</span><div className="mt-2 flex flex-wrap items-baseline gap-1"><b className="text-[15px] font-extrabold tracking-tight text-[#20392B] sm:text-[20px]">{value}</b><small className={i===0?"text-[8px] font-bold text-[#398064]":"text-[8px] text-[#A0AAA1]"}>{sub}</small></div><div className="mt-2 h-1 overflow-hidden rounded-full bg-[#EDF2ED]"><div className="h-full rounded-full bg-[#70A887]" style={{width: i===0?"76%":i===1?"61%":"84%"}}/></div></div>)}
             </div>
-
-            {/* Chart */}
-            <div className="mt-4 rounded-xl border border-[#E9EEE8] p-3 sm:p-4">
-              <div className="flex items-center justify-between">
-                <p className="text-[11px] font-bold text-[#314638]">
-                  حركة الطلبات
-                </p>
-                <span className="text-[9px] text-[#87938A]">
-                  عرض توضيحي
-                </span>
+            <div className="mt-3.5 rounded-[14px] border border-[#E9EEE8] p-3.5 sm:p-4">
+              <div className="flex items-center justify-between"><div><b className="text-[10px] text-[#2B4032] sm:text-[11px]">نظرة على المبيعات</b><p className="mt-1 text-[8px] text-[#9AA49B]">الأداء خلال آخر 7 أيام</p></div><span className="rounded-md bg-[#F1F5F0] px-2 py-1 text-[8px] text-[#718174]">هذا الأسبوع⌄</span></div>
+              <div className="relative mt-4 flex h-[105px] items-end gap-2 border-b border-[#EEF1ED] px-1">
+                <div className="pointer-events-none absolute inset-0 flex flex-col justify-between pb-1"><i className="border-t border-dashed border-[#EEF1ED]"/><i className="border-t border-dashed border-[#EEF1ED]"/><i className="border-t border-dashed border-[#EEF1ED]"/></div>
+                {[38,57,43,75,61,88,69].map((h,i)=><div key={i} className="relative z-10 flex-1 rounded-t-[5px] bg-[#BBD8C4] transition-all duration-700 hover:bg-[#398064]" style={{height:`${h}%`,animation:`bar-rise .8s ease-out ${i*.08}s both`}}>{i===5&&<span className="absolute -top-5 left-1/2 -translate-x-1/2 whitespace-nowrap rounded bg-[#174D3A] px-1.5 py-1 text-[7px] text-white">32.4k</span>}</div>)}
               </div>
-
-              <div className="mt-5 flex h-28 items-end gap-2">
-                {[30, 45, 36, 62, 48, 75, 57, 86, 67, 78, 58, 92].map(
-                  (height, index) => (
-                    <div
-                      key={index}
-                      className={`flex-1 rounded-t-sm ${
-                        index === 11
-                          ? "bg-[#174D3A]"
-                          : "bg-[#B9D4C3]"
-                      }`}
-                      style={{ height: `${height}%` }}
-                    />
-                  )
-                )}
-              </div>
-              <div className="mt-3 flex justify-between text-[8px] text-[#A1AAA3]">
-                <span>01</span>
-                <span>07</span>
-                <span>14</span>
-                <span>21</span>
-                <span>30</span>
-              </div>
+              <div className="mt-2 flex justify-between text-[8px] text-[#A0AAA2]"><span>السبت</span><span>الأحد</span><span>الإثنين</span><span>الثلاثاء</span><span>الأربعاء</span><span>الخميس</span><span>الجمعة</span></div>
             </div>
-
-            {/* Recent orders */}
-            <div className="mt-4 rounded-xl border border-[#E9EEE8] p-3 sm:p-4">
-              <div className="mb-3 flex items-center justify-between">
-                <p className="text-[11px] font-bold text-[#314638]">
-                  أحدث الطلبات
-                </p>
-                <span className="text-[9px] text-[#398064]">
-                  جميع الطلبات
-                </span>
-              </div>
-
-              {[
-                ["#1024", "جديد"],
-                ["#1023", "قيد المعالجة"],
-                ["#1022", "تم التجهيز"],
-              ].map(([id, status]) => (
-                <div
-                  key={id}
-                  className="flex items-center justify-between border-t border-[#F0F2EF] py-2.5"
-                >
-                  <span className="text-[9px] font-semibold text-[#58665C]">
-                    {id}
-                  </span>
-                  <span className="rounded-md bg-[#EDF5EF] px-2 py-1 text-[8px] font-semibold text-[#347354]">
-                    {status}
-                  </span>
-                </div>
-              ))}
+            <div className="mt-3.5 overflow-hidden rounded-[14px] border border-[#E9EEE8]">
+              <div className="flex items-center justify-between px-3.5 py-3"><b className="text-[10px] text-[#2B4032]">آخر الطلبات</b><span className="text-[8px] font-bold text-[#398064]">عرض الكل ←</span></div>
+              {orders.map((o,i)=><div key={o.id} className="grid grid-cols-[1fr_auto] items-center gap-2 border-t border-[#F0F2EF] px-3.5 py-2.5" style={{animation:`fade-up .5s ease-out ${i*.12}s both`}}><div><b className="block text-[8px] text-[#435448]">{o.id} <span className="font-normal text-[#A0AAA2]">· {o.customer}</span></b><span className="mt-1 block text-[8px] text-[#98A198]">{o.item}</span></div><div className="text-left"><b className="block text-[8px] text-[#394B3D]">{o.amount}</b><span className={`mt-1 inline-block rounded px-1.5 py-0.5 text-[7px] ${o.tone==="green"?"bg-[#EAF4EC] text-[#34734C]":o.tone==="amber"?"bg-[#FBF2E2] text-[#A9782E]":"bg-[#EAF1F8] text-[#54799D]"}`}>{o.status}</span></div></div>)}
             </div>
           </div>
-
-          {/* Sidebar */}
-          <aside className="border-r border-[#E9EEE8] bg-[#FAFBF9] p-3 sm:p-4" dir="rtl">
-            <div className="mb-7 flex items-center gap-2">
-              <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-[#174D3A] text-xs font-black text-white">
-                S
-              </div>
-              <span className="text-xs font-extrabold text-[#263D30]">
-                Sougify
-              </span>
-            </div>
-
-            <p className="mb-3 text-[8px] font-bold text-[#A1AAA3]">
-              مساحة العمل
-            </p>
-
-            {[
-              { icon: LayoutDashboard, title: "الرئيسية", active: true },
-              { icon: ShoppingBag, title: "الطلبات" },
-              { icon: Package, title: "المنتجات" },
-              { icon: Boxes, title: "المخزون" },
-              { icon: Truck, title: "التوصيل" },
-              { icon: BarChart3, title: "التقارير" },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className={`mb-1 flex items-center gap-2 rounded-lg px-2 py-2.5 text-[9px] font-semibold ${
-                  item.active
-                    ? "bg-[#E8F1EA] text-[#20583F]"
-                    : "text-[#7F8A81]"
-                }`}
-              >
-                <item.icon size={13} />
-                {item.title}
-              </div>
-            ))}
-
-            <div className="mt-8 border-t border-[#E9EEE8] pt-4">
-              <p className="text-[8px] leading-5 text-[#A1AAA3]">
-                مساحة عملك التجارية
-              </p>
-            </div>
+          <aside className="border-r border-[#E9EEE8] bg-[#FAFCF9] p-3 sm:p-4" dir="rtl">
+            <div className="mb-7 flex items-center gap-2"><span className="grid h-7 w-7 place-items-center rounded-lg bg-[#174D3A] text-white"><ShoppingBag size={13}/></span><b className="text-[11px] text-[#233B2D]">Sougify</b></div>
+            <p className="mb-2 px-2 text-[8px] font-bold text-[#A0AAA1]">القائمة الرئيسية</p>
+            {[[LayoutDashboard,"لوحة التحكم",true],[ClipboardList,"الطلبات",false],[Package,"المنتجات",false],[Boxes,"المخزون",false],[Truck,"التوصيل",false],[BarChart3,"التقارير",false]].map(([Icon,label,active])=><div key={label as string} className={`mb-1 flex items-center gap-2 rounded-lg px-2 py-2.5 text-[8px] font-semibold sm:text-[9px] ${active?"bg-[#EAF2EB] text-[#225A3F]":"text-[#839087]"}`}><Icon size={13}/>{label as string}</div>)}
+            <div className="mt-8 border-t border-[#E9EEE8] pt-4"><p className="mb-3 text-[8px] font-bold text-[#A0AAA1]">المتجر</p><div className="flex items-center gap-2 text-[8px] text-[#839087]"><Globe2 size={12}/> إعدادات المتجر</div></div>
+            <div className="mt-16 rounded-xl bg-[#174D3A] p-3 text-white"><Sparkles size={15}/><p className="mt-3 text-[9px] font-bold">مساحة واحدة</p><p className="mt-1 text-[8px] leading-5 text-[#D2E5D8]">لتفاصيل تجارتك اليومية</p></div>
           </aside>
         </div>
-
-        <div className="border-t border-[#EDF0EB] bg-[#FAFBF9] px-4 py-2.5 text-center text-[9px] text-[#8C988E]">
-          نموذج توضيحي للواجهة — البيانات المعروضة تجريبية
-        </div>
+        <div className="border-t border-[#EEF1ED] bg-[#FBFCFA] px-4 py-2 text-center text-[8px] text-[#9AA49B]">واجهة تجريبية توضيحية — الأرقام والطلبات ليست بيانات حقيقية</div>
       </div>
+      <div className="sougify-float-card absolute -right-4 top-[18%] hidden items-center gap-3 rounded-2xl border border-[#E7ECE6] bg-white p-3.5 shadow-[0_18px_50px_-20px_rgba(17,55,37,.25)] sm:flex">
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-[#EAF4EC] text-[#398064]"><Package size={17}/></span><span><b className="block text-[10px] text-[#294332]">طلب جديد وصل</b><small className="mt-1 block text-[8px] text-[#89958B]">تمت إضافة طلب للمتجر</small></span><span className="h-2 w-2 rounded-full bg-[#56A276]"/>
+      </div>
+      <div className="sougify-float-card-two absolute -bottom-5 -left-4 hidden rounded-2xl border border-[#E7ECE6] bg-white px-4 py-3 shadow-[0_18px_50px_-20px_rgba(17,55,37,.25)] sm:block"><p className="text-[8px] text-[#929D94]">إدارة من مكان واحد</p><div className="mt-1 flex items-center gap-2"><span className="text-[17px] font-black text-[#1D4E37]">Sougify</span><span className="rounded-full bg-[#EDF5EE] px-2 py-1 text-[8px] text-[#398064]">منظّم</span></div></div>
     </div>
   );
 }
 
 export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <main
-      dir="rtl"
-      className="min-h-screen bg-[#F8F9F6] font-sans text-[#172D25] selection:bg-[#D7E8DC] selection:text-[#174D3A]"
-    >
-      {/* Navigation */}
-      <header className="sticky top-0 z-50 border-b border-[#E8ECE6] bg-[#F8F9F6]/95 backdrop-blur-md">
-        <div className="mx-auto flex h-[76px] max-w-[1240px] items-center justify-between px-5 md:px-8">
-          <Brand />
-
-          <nav className="hidden items-center gap-8 text-[13px] font-semibold text-[#69776D] md:flex">
-            <Link href="#features" className="transition hover:text-[#174D3A]">
-              المميزات
-            </Link>
-            <Link href="#platform" className="transition hover:text-[#174D3A]">
-              المنصة
-            </Link>
-            <Link href="#how" className="transition hover:text-[#174D3A]">
-              كيف تعمل
-            </Link>
-            <Link href="#faq" className="transition hover:text-[#174D3A]">
-              الأسئلة الشائعة
-            </Link>
-          </nav>
-
-          <div className="flex items-center gap-3">
-            <Link
-              href="/auth/login"
-              className="hidden px-3 py-2 text-sm font-bold text-[#526358] transition hover:text-[#174D3A] sm:block"
-            >
-              تسجيل الدخول
-            </Link>
-            <Link
-              href="/auth/signup"
-              className="flex items-center gap-2 rounded-lg bg-[#174D3A] px-5 py-3 text-xs font-bold text-white transition hover:bg-[#236348]"
-            >
-              ابدأ الآن
-              <ArrowUpLeft size={15} />
-            </Link>
-          </div>
+    <main dir="rtl" className="min-h-screen overflow-hidden bg-[#FBFCF9] text-[#172D25]">
+      <style jsx global>{`
+        @keyframes float-card { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-10px)} }
+        @keyframes float-card-reverse { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+        @keyframes fade-up { from{opacity:0;transform:translateY(9px)} to{opacity:1;transform:translateY(0)} }
+        @keyframes bar-rise { from{height:0;opacity:.4} to{opacity:1} }
+        @keyframes soft-pulse { 0%,100%{box-shadow:0 0 0 0 rgba(91,157,112,.2)} 50%{box-shadow:0 0 0 9px rgba(91,157,112,0)} }
+        .sougify-float-card{animation:float-card 5s ease-in-out infinite}
+        .sougify-float-card-two{animation:float-card-reverse 6s ease-in-out infinite}
+        .sougify-dashboard{animation:fade-up .75s ease-out both}
+        .sougify-visual:after{content:"";position:absolute;z-index:-1;inset:12% 8%;border-radius:50%;background:#DDECE0;filter:blur(55px)}
+        @media(prefers-reduced-motion:reduce){.sougify-float-card,.sougify-float-card-two,.sougify-dashboard{animation:none!important}*{scroll-behavior:auto!important;transition:none!important}}
+      `}</style>
+      <header className="sticky top-0 z-50 border-b border-[#E9EDE7] bg-[#FBFCF9]/90 backdrop-blur-xl">
+        <div className="mx-auto flex h-[76px] max-w-[1320px] items-center justify-between px-5 md:px-9">
+          <Brand/>
+          <nav className="hidden items-center gap-9 text-[13px] font-semibold text-[#68766C] md:flex"><a href="#platform" className="transition hover:text-[#174D3A]">المنصة</a><a href="#features" className="transition hover:text-[#174D3A]">المميزات</a><a href="#how" className="transition hover:text-[#174D3A]">كيف تعمل</a><a href="#faq" className="transition hover:text-[#174D3A]">الأسئلة الشائعة</a></nav>
+          <div className="hidden items-center gap-5 sm:flex"><Link href="/auth/login" className="text-[13px] font-bold text-[#526358] transition hover:text-[#174D3A]">تسجيل الدخول</Link><Link href="/auth/signup" className="inline-flex items-center gap-2 rounded-xl bg-[#174D3A] px-5 py-3 text-[12px] font-bold text-white shadow-sm transition hover:-translate-y-0.5 hover:bg-[#236348]">ابدأ الآن <ArrowUpLeft size={15}/></Link></div>
+          <button onClick={()=>setMenuOpen(v=>!v)} className="grid h-10 w-10 place-items-center rounded-xl border border-[#E5EAE3] text-[#294332] sm:hidden" aria-label={menuOpen?"إغلاق القائمة":"فتح القائمة"}>{menuOpen?<X size={19}/>:<Menu size={19}/>}</button>
         </div>
+        {menuOpen&&<nav className="border-t border-[#E9EDE7] bg-[#FBFCF9] px-5 py-4 sm:hidden"><div className="flex flex-col gap-4 text-sm font-semibold text-[#526358]"><a onClick={()=>setMenuOpen(false)} href="#platform">المنصة</a><a onClick={()=>setMenuOpen(false)} href="#features">المميزات</a><a onClick={()=>setMenuOpen(false)} href="#how">كيف تعمل</a><a onClick={()=>setMenuOpen(false)} href="#faq">الأسئلة الشائعة</a><Link href="/auth/login">تسجيل الدخول</Link><Link href="/auth/signup" className="rounded-lg bg-[#174D3A] px-4 py-3 text-center text-white">إنشاء حساب</Link></div></nav>}
       </header>
 
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-[#E8ECE6]">
-        <div className="absolute left-0 top-0 h-full w-[42%] bg-[#EEF3EC] opacity-60" />
-
-        <div className="relative mx-auto grid max-w-[1240px] items-center gap-16 px-5 py-20 md:px-8 md:py-28 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <div className="mb-7 inline-flex items-center gap-2 text-xs font-bold text-[#398064]">
-              <span className="h-2 w-2 rounded-full bg-[#398064]" />
-              منصة لإدارة التجارة والأعمال
-            </div>
-
-            <h1 className="max-w-xl text-[39px] font-black leading-[1.4] tracking-tight text-[#172D25] sm:text-5xl lg:text-[59px]">
-              كل تفاصيل تجارتك
-              <br />
-              <span className="text-[#398064]">
-                في مكان واحد.
-              </span>
-            </h1>
-
-            <p className="mt-7 max-w-lg text-sm leading-9 text-[#727D74] md:text-base">
-              من المنتجات والمخزون إلى الطلبات والتوصيل. يمنحك Sougify
-              مساحة عمل منظمة لإدارة عملياتك التجارية ومتابعة تفاصيلها
-              من لوحة تحكم واحدة.
-            </p>
-
-            <div className="mt-9 flex flex-wrap items-center gap-4">
-              <Link
-                href="/auth/signup"
-                className="group flex items-center gap-4 rounded-lg bg-[#174D3A] px-7 py-4 text-sm font-bold text-white transition hover:bg-[#236348]"
-              >
-                أنشئ مساحة عملك
-                <ArrowLeft
-                  size={17}
-                  className="transition group-hover:-translate-x-1"
-                />
-              </Link>
-              <Link
-                href="#features"
-                className="flex items-center gap-2 px-3 py-3 text-sm font-bold text-[#58685D] transition hover:text-[#174D3A]"
-              >
-                اكتشف المميزات
-                <ArrowUpLeft size={16} />
-              </Link>
-            </div>
-
-            <div className="mt-10 flex flex-wrap gap-x-6 gap-y-3 border-t border-[#E4E9E2] pt-6 text-[11px] font-medium text-[#7D897F]">
-              <span className="flex items-center gap-2">
-                <Check size={14} className="text-[#398064]" />
-                إدارة مركزية
-              </span>
-              <span className="flex items-center gap-2">
-                <Check size={14} className="text-[#398064]" />
-                واجهة عربية
-              </span>
-              <span className="flex items-center gap-2">
-                <Check size={14} className="text-[#398064]" />
-                تجربة استخدام واضحة
-              </span>
-            </div>
+      <section className="relative isolate overflow-hidden">
+        <div className="pointer-events-none absolute -left-40 top-[-120px] -z-10 h-[520px] w-[520px] rounded-full bg-[#E5F0E7] blur-[100px]"/>
+        <div className="mx-auto grid max-w-[1320px] items-center gap-14 px-5 pb-20 pt-16 md:px-9 md:pb-28 md:pt-24 lg:grid-cols-[.86fr_1.14fr] lg:gap-12">
+          <div className="relative z-10">
+            <div className="mb-7 inline-flex items-center gap-2 rounded-full border border-[#DCE9DE] bg-white/80 px-3.5 py-2 text-[11px] font-bold text-[#397453]"><span className="h-2 w-2 rounded-full bg-[#5C9B72] shadow-[0_0_0_4px_#E7F2E9]"/> مساحة عمل للتجارة الإلكترونية</div>
+            <h1 className="max-w-[620px] text-[42px] font-black leading-[1.35] tracking-[-1.7px] text-[#172D25] sm:text-5xl lg:text-[65px]">تجارتك تستحق<br/><span className="relative inline-block text-[#398064]">إدارة أذكى<span className="absolute -bottom-1 right-0 h-[5px] w-[72%] rounded-full bg-[#D4E7D8]"/></span></h1>
+            <p className="mt-7 max-w-[520px] text-[14px] leading-[2.15] text-[#6F7D72] sm:text-[16px]">من عرض المنتجات إلى متابعة الطلبات والمخزون والتوصيل. اجمع تفاصيل عملك في مساحة واحدة، وخلّي يومك التجاري أكثر وضوحاً وتنظيماً.</p>
+            <div className="mt-9 flex flex-wrap items-center gap-3"><Link href="/auth/signup" className="group inline-flex items-center gap-5 rounded-xl bg-[#174D3A] px-6 py-4 text-[13px] font-bold text-white shadow-[0_12px_30px_-14px_rgba(23,77,58,.65)] transition hover:-translate-y-1 hover:bg-[#236348]">أنشئ متجرك الآن <ArrowLeft size={17} className="transition group-hover:-translate-x-1"/></Link><a href="#platform" className="inline-flex items-center gap-2 rounded-xl px-5 py-4 text-[13px] font-bold text-[#526358] transition hover:bg-white">اكتشف المنصة <ArrowUpLeft size={16}/></a></div>
+            <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 border-t border-[#E7ECE5] pt-6 text-[11px] font-medium text-[#7B887E]"><span className="flex items-center gap-2"><Check size={14} className="text-[#398064]"/> واجهة عربية</span><span className="flex items-center gap-2"><Check size={14} className="text-[#398064]"/> تنظيم من مكان واحد</span><span className="flex items-center gap-2"><Check size={14} className="text-[#398064]"/> تجربة بسيطة</span></div>
           </div>
+          <div id="platform" className="relative py-4 sm:px-3"><DashboardVisual/></div>
+        </div>
+        <div className="border-y border-[#E9EDE7] bg-white/70"><div className="mx-auto flex max-w-[1320px] flex-wrap items-center justify-center gap-x-12 gap-y-4 px-5 py-5 text-[11px] font-semibold text-[#87938A] md:justify-between md:px-9"><span>كل ما تحتاجه لإدارة متجرك</span><span className="flex items-center gap-2"><ShoppingBag size={15} className="text-[#6C9A78]"/> المنتجات</span><span className="flex items-center gap-2"><ClipboardList size={15} className="text-[#6C9A78]"/> الطلبات</span><span className="flex items-center gap-2"><Boxes size={15} className="text-[#6C9A78]"/> المخزون</span><span className="flex items-center gap-2"><Truck size={15} className="text-[#6C9A78]"/> التوصيل</span><span className="flex items-center gap-2"><BarChart3 size={15} className="text-[#6C9A78]"/> التقارير</span></div></div>
+      </section>
 
-          <div id="platform" className="relative">
-            <DashboardPreview />
-          </div>
+      <section className="mx-auto max-w-[1320px] px-5 py-24 md:px-9 md:py-32">
+        <div className="grid gap-10 md:grid-cols-[1fr_.75fr] md:items-end"><div><span className="text-[11px] font-extrabold tracking-[.15em] text-[#398064]">مساحة واحدة. رؤية أوضح.</span><h2 className="mt-5 max-w-[660px] text-3xl font-black leading-[1.5] tracking-tight text-[#1B3326] md:text-[43px]">بدل ما تتشتت بين الأدوات،<br/>خلّي عملياتك في مكان واحد.</h2></div><p className="max-w-[440px] text-[13px] leading-8 text-[#78847A]">إدارة التجارة اليومية فيها تفاصيل كثيرة. Sougify يساعدك على ترتيب هذه التفاصيل ومتابعة ما يحدث في نشاطك دون الحاجة إلى التنقل بين شاشات وأدوات متفرقة.</p></div>
+      </section>
+
+      <section id="features" className="border-y border-[#E8EDE6] bg-white">
+        <div className="mx-auto max-w-[1320px] px-5 py-24 md:px-9 md:py-28">
+          <div className="mb-14 flex flex-col justify-between gap-5 md:flex-row md:items-end"><div><span className="text-[11px] font-extrabold tracking-[.15em] text-[#398064]">إمكانيات المنصة</span><h2 className="mt-4 text-3xl font-black tracking-tight text-[#1B3326] md:text-[42px]">كل جزء من تجارتك،<br className="hidden sm:block"/> في مكانه الصحيح.</h2></div><p className="max-w-sm text-[13px] leading-8 text-[#7C887E]">أدوات عملية تساعدك على تنظيم دورة العمل اليومية من أول منتج إلى آخر طلب.</p></div>
+          <div className="grid border-l border-t border-[#E9EDE8] sm:grid-cols-2 lg:grid-cols-3">{features.map(({icon:Icon,no,title,desc})=><article key={no} className="group min-h-[250px] border-b border-r border-[#E9EDE8] p-7 transition duration-300 hover:bg-[#F8FBF7] md:p-9"><div className="flex items-center justify-between"><span className="grid h-12 w-12 place-items-center rounded-[15px] bg-[#EDF4EE] text-[#398064] transition duration-300 group-hover:-translate-y-1 group-hover:bg-[#174D3A] group-hover:text-white"><Icon size={21}/></span><span className="text-[11px] font-bold text-[#B5BEB5]">{no}</span></div><h3 className="mt-8 text-[17px] font-extrabold text-[#263D2E]">{title}</h3><p className="mt-3 max-w-[330px] text-[12px] leading-8 text-[#7C887E]">{desc}</p></article>)}</div>
         </div>
       </section>
 
-      {/* Introduction */}
-      <section className="mx-auto max-w-[1240px] px-5 py-20 md:px-8 md:py-28">
-        <div className="grid gap-8 md:grid-cols-2 md:items-end">
-          <SectionTitle
-            label="إدارة متكاملة"
-            title="الأعمال اليومية تحتاج إلى نظام يجمع تفاصيلها."
-            description="عندما تتوزع بيانات المنتجات والطلبات والمخزون بين أدوات مختلفة، يصبح تتبع العمليات أكثر صعوبة. يجمع Sougify هذه الجوانب ضمن تجربة عمل موحدة."
-          />
-
-          <div className="border-r-2 border-[#A5C5AC] pr-6 md:mr-auto md:max-w-sm">
-            <p className="text-sm leading-9 text-[#78837A]">
-              ليس الهدف إضافة أدوات أكثر إلى يومك، بل تنظيم الأدوات
-              والعمليات التي تحتاجها فعلاً حتى تكون الصورة أوضح
-              والقرارات أسهل.
-            </p>
-          </div>
-        </div>
+      <section id="how" className="relative overflow-hidden bg-[#F2F6F0]">
+        <div className="absolute -left-32 top-0 h-96 w-96 rounded-full bg-white blur-[90px]"/>
+        <div className="relative mx-auto grid max-w-[1320px] gap-14 px-5 py-24 md:px-9 md:py-28 lg:grid-cols-[.8fr_1.2fr]"><div><span className="text-[11px] font-extrabold tracking-[.15em] text-[#398064]">بداية سهلة</span><h2 className="mt-5 max-w-md text-3xl font-black leading-[1.5] tracking-tight text-[#1B3326] md:text-[43px]">ابدأ بخطوات بسيطة.<br/>وتابع كل شيء بوضوح.</h2><p className="mt-5 max-w-md text-[13px] leading-8 text-[#78847A]">لا تحتاج إلى تعقيد الأمور. جهّز متجرك ونظّم منتجاتك ثم تابع سير العمل من لوحة واحدة.</p><Link href="/auth/signup" className="mt-8 inline-flex items-center gap-3 rounded-xl bg-[#174D3A] px-5 py-3.5 text-[12px] font-bold text-white transition hover:bg-[#236348]">ابدأ إعداد حسابك <ArrowLeft size={16}/></Link></div><div className="border-t border-[#DCE5DA]">{steps.map(([n,t,d])=><div key={n} className="grid grid-cols-[60px_1fr] gap-5 border-b border-[#DCE5DA] py-8 md:grid-cols-[86px_1fr]"><span className="pt-1 text-[25px] font-black text-[#9BB7A0]">{n}</span><div><h3 className="text-[17px] font-extrabold text-[#263D2E]">{t}</h3><p className="mt-2 max-w-lg text-[12px] leading-8 text-[#78847A]">{d}</p></div></div>)}</div></div>
       </section>
 
-      {/* Features */}
-      <section id="features" className="border-y border-[#E8ECE6] bg-white">
-        <div className="mx-auto max-w-[1240px] px-5 py-24 md:px-8">
-          <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-            <SectionTitle
-              label="إمكانيات المنصة"
-              title="كل عملية لها مكانها."
-              description="الأدوات الأساسية لتنظيم نشاطك التجاري، مصممة لتعمل ضمن مساحة واحدة."
-            />
-            <span className="hidden pb-2 text-xs font-semibold text-[#929D94] md:block">
-              06 أدوات لإدارة عملياتك
-            </span>
-          </div>
+      <section className="bg-[#174D3A]"><div className="mx-auto flex max-w-[1320px] flex-col justify-between gap-8 px-5 py-16 md:flex-row md:items-center md:px-9 md:py-20"><div><span className="text-[11px] font-bold tracking-[.14em] text-[#B9D9C1]">وقتك لإدارة تجارتك</span><h2 className="mt-4 max-w-2xl text-3xl font-black leading-[1.5] text-white md:text-[40px]">رتّب عملياتك. وركّز على نمو عملك.</h2><p className="mt-3 text-[13px] leading-8 text-[#D0E1D4]">ابدأ ببناء مساحة عمل تناسب نشاطك التجاري.</p></div><Link href="/auth/signup" className="inline-flex shrink-0 items-center justify-center gap-4 rounded-xl bg-white px-7 py-4 text-[13px] font-extrabold text-[#174D3A] transition hover:-translate-y-1 hover:bg-[#EEF5EF]">أنشئ حسابك الآن <ArrowLeft size={17}/></Link></div></section>
 
-          <div className="grid border-l border-t border-[#E8ECE6] sm:grid-cols-2 lg:grid-cols-3">
-            {features.map((feature) => (
-              <article
-                key={feature.number}
-                className="group min-h-[245px] border-b border-r border-[#E8ECE6] p-7 transition-colors hover:bg-[#F8FAF7] md:p-9"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#EDF4EE] text-[#398064] transition group-hover:bg-[#174D3A] group-hover:text-white">
-                    <feature.icon size={21} />
-                  </div>
-                  <span className="text-xs font-semibold text-[#B0BAB0]">
-                    {feature.number}
-                  </span>
-                </div>
+      <section id="faq" className="mx-auto max-w-[1320px] px-5 py-24 md:px-9 md:py-28"><div className="grid gap-12 lg:grid-cols-[.7fr_1.3fr]"><div><span className="text-[11px] font-extrabold tracking-[.15em] text-[#398064]">أسئلة شائعة</span><h2 className="mt-4 text-3xl font-black leading-[1.5] text-[#1B3326] md:text-[40px]">قبل أن تبدأ.</h2><p className="mt-4 max-w-sm text-[13px] leading-8 text-[#78847A]">بعض الإجابات التي تساعدك على فهم فكرة Sougify.</p></div><div className="border-t border-[#E5EAE3]">{[["ما هو Sougify؟","Sougify منصة لإدارة التجارة الإلكترونية تهدف إلى جمع تفاصيل المنتجات والطلبات والمخزون والتوصيل ضمن مساحة عمل موحدة."],["لمن صُممت المنصة؟","لأصحاب المتاجر والأنشطة التجارية الذين يريدون تنظيماً أوضح لعمليات البيع ومتابعة الطلبات."],["هل يمكنني استخدام المنصة باللغة العربية؟","هذه الصفحة التعريفية مصممة باللغة العربية. وتختلف اللغات المتاحة داخل وظائف المنصة بحسب ما هو مفعّل في حسابك."],["كيف أبدأ؟","يمكنك إنشاء حساب من زر ابدأ الآن، ثم متابعة خطوات إعداد مساحة العمل المتاحة داخل المنصة."]].map(([q,a])=><details key={q} className="group border-b border-[#E5EAE3] py-6"><summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-[13px] font-bold text-[#293E31]">{q}<ChevronDown size={17} className="shrink-0 text-[#398064] transition group-open:rotate-180"/></summary><p className="mt-4 max-w-2xl text-[12px] leading-8 text-[#7B877D]">{a}</p></details>)}</div></div></section>
 
-                <h3 className="mt-7 text-lg font-extrabold text-[#263B2E]">
-                  {feature.title}
-                </h3>
-                <p className="mt-3 text-[13px] leading-8 text-[#7B867D]">
-                  {feature.description}
-                </p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Workflow */}
-      <section id="how" className="mx-auto max-w-[1240px] px-5 py-24 md:px-8 md:py-28">
-        <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr]">
-          <div>
-            <SectionTitle
-              label="طريقة العمل"
-              title="من الإعداد إلى الإدارة. بخطوات واضحة."
-              description="ابدأ بتجهيز نشاطك، ثم انتقل إلى إدارة تفاصيله اليومية من خلال مساحة عمل واحدة."
-            />
-            <Link
-              href="/auth/signup"
-              className="mt-8 inline-flex items-center gap-3 border-b border-[#398064] pb-2 text-sm font-bold text-[#286044] transition hover:gap-5"
-            >
-              ابدأ إعداد حسابك
-              <ArrowLeft size={17} />
-            </Link>
-          </div>
-
-          <div className="border-t border-[#DDE5DC]">
-            {workflow.map((item) => (
-              <div
-                key={item.number}
-                className="grid grid-cols-[65px_1fr] gap-5 border-b border-[#DDE5DC] py-8 md:grid-cols-[90px_1fr]"
-              >
-                <span className="pt-1 text-2xl font-black text-[#9BB5A0]">
-                  {item.number}
-                </span>
-                <div>
-                  <h3 className="text-lg font-extrabold text-[#243A2D]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 max-w-lg text-sm leading-8 text-[#7B867D]">
-                    {item.description}
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Closing CTA */}
-      <section className="bg-[#174D3A]">
-        <div className="mx-auto flex max-w-[1240px] flex-col items-start justify-between gap-8 px-5 py-16 md:flex-row md:items-center md:px-8 md:py-20">
-          <div>
-            <span className="text-xs font-bold text-[#B6D9C1]">
-              ابدأ مع Sougify
-            </span>
-            <h2 className="mt-4 max-w-2xl text-3xl font-black leading-relaxed text-white md:text-4xl">
-              نظّم تجارتك. وامنح عملك مساحة للنمو.
-            </h2>
-            <p className="mt-4 max-w-xl text-sm leading-8 text-[#D0E1D4]">
-              أنشئ حسابك وابدأ بإعداد مساحة العمل الخاصة بنشاطك التجاري.
-            </p>
-          </div>
-
-          <Link
-            href="/auth/signup"
-            className="flex shrink-0 items-center gap-4 rounded-lg bg-white px-7 py-4 text-sm font-extrabold text-[#174D3A] transition hover:bg-[#EEF4EF]"
-          >
-            ابدأ الآن
-            <ArrowLeft size={18} />
-          </Link>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section id="faq" className="mx-auto max-w-[1240px] px-5 py-24 md:px-8">
-        <div className="grid gap-12 lg:grid-cols-[0.75fr_1.25fr]">
-          <SectionTitle
-            label="معلومات مهمة"
-            title="أسئلة قد تدور في ذهنك."
-            description="إجابات مختصرة تساعدك على التعرف على فكرة المنصة وطريقة استخدامها."
-          />
-
-          <div className="border-t border-[#E5EAE3]">
-            {[
-              {
-                q: "ما هو Sougify؟",
-                a: "Sougify منصة لإدارة الأنشطة التجارية تجمع أدوات إدارة المنتجات والطلبات والمخزون والتوصيل ضمن مساحة عمل واحدة.",
-              },
-              {
-                q: "من يمكنه استخدام المنصة؟",
-                a: "يمكن أن تناسب المنصة أصحاب المتاجر والأنشطة التجارية التي تحتاج إلى تنظيم عمليات البيع وإدارة الطلبات والمخزون.",
-              },
-              {
-                q: "هل يمكنني إدارة طلبات الدفع عند الاستلام؟",
-                a: "تتضمن رؤية المنصة تنظيم الطلبات ومتابعة مبالغ الدفع عند الاستلام وحالات التحصيل والتسليم.",
-              },
-              {
-                q: "كيف أبدأ باستخدام Sougify؟",
-                a: "ابدأ بإنشاء حساب، ثم اختر نوع نشاطك التجاري واتبع خطوات إعداد مساحة العمل.",
-              },
-            ].map((item) => (
-              <details
-                key={item.q}
-                className="group border-b border-[#E5EAE3] py-6"
-              >
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-5 text-sm font-bold text-[#293D30]">
-                  {item.q}
-                  <ChevronDown
-                    size={18}
-                    className="shrink-0 text-[#398064] transition group-open:rotate-180"
-                  />
-                </summary>
-                <p className="mt-5 max-w-2xl text-[13px] leading-8 text-[#7B867D]">
-                  {item.a}
-                </p>
-              </details>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="border-t border-[#E5EAE3] bg-white">
-        <div className="mx-auto max-w-[1240px] px-5 py-12 md:px-8">
-          <div className="flex flex-col justify-between gap-10 md:flex-row">
-            <div className="max-w-sm">
-              <Brand />
-              <p className="mt-5 text-sm leading-8 text-[#879187]">
-                مساحة عمل موحدة لإدارة تجارتك وتنظيم عملياتك اليومية
-                بصورة أكثر وضوحاً.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-12 text-sm">
-              <div>
-                <h3 className="font-extrabold text-[#263B2E]">
-                  استكشف
-                </h3>
-                <div className="mt-5 flex flex-col gap-4 text-[#79847B]">
-                  <Link href="#features" className="hover:text-[#398064]">
-                    المميزات
-                  </Link>
-                  <Link href="#platform" className="hover:text-[#398064]">
-                    المنصة
-                  </Link>
-                  <Link href="#how" className="hover:text-[#398064]">
-                    طريقة العمل
-                  </Link>
-                </div>
-              </div>
-
-              <div>
-                <h3 className="font-extrabold text-[#263B2E]">
-                  حسابك
-                </h3>
-                <div className="mt-5 flex flex-col gap-4 text-[#79847B]">
-                  <Link href="/auth/login" className="hover:text-[#398064]">
-                    تسجيل الدخول
-                  </Link>
-                  <Link href="/auth/signup" className="hover:text-[#398064]">
-                    إنشاء حساب
-                  </Link>
-                  <Link href="#faq" className="hover:text-[#398064]">
-                    الأسئلة الشائعة
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-12 flex flex-col justify-between gap-4 border-t border-[#E9EDE8] pt-7 text-xs text-[#9AA39B] sm:flex-row">
-            <p>
-              © {new Date().getFullYear()} Sougify. جميع الحقوق محفوظة.
-            </p>
-            <p>إدارة أفضل. رؤية أوضح.</p>
-          </div>
-        </div>
-      </footer>
+      <footer className="border-t border-[#E7ECE5] bg-white"><div className="mx-auto max-w-[1320px] px-5 py-12 md:px-9"><div className="flex flex-col justify-between gap-9 md:flex-row"><div className="max-w-sm"><Brand/><p className="mt-5 text-[12px] leading-8 text-[#849087]">مساحة عمل تساعدك على تنظيم تجارتك ومتابعة عملياتك اليومية بوضوح.</p></div><div className="flex flex-wrap gap-x-12 gap-y-7 text-[12px]"><div className="flex flex-col gap-4"><b className="text-[#263D2E]">استكشف</b><a href="#features" className="text-[#7B877D] hover:text-[#398064]">المميزات</a><a href="#how" className="text-[#7B877D] hover:text-[#398064]">كيف تعمل</a><a href="#faq" className="text-[#7B877D] hover:text-[#398064]">الأسئلة الشائعة</a></div><div className="flex flex-col gap-4"><b className="text-[#263D2E]">حسابك</b><Link href="/auth/login" className="text-[#7B877D] hover:text-[#398064]">تسجيل الدخول</Link><Link href="/auth/signup" className="text-[#7B877D] hover:text-[#398064]">إنشاء حساب</Link></div></div></div><div className="mt-10 flex flex-col justify-between gap-3 border-t border-[#E9EDE8] pt-6 text-[10px] text-[#9AA39B] sm:flex-row"><p>© {new Date().getFullYear()} Sougify. جميع الحقوق محفوظة.</p><p>تجارة أكثر تنظيماً. رؤية أوضح.</p></div></div></footer>
     </main>
   );
 }
