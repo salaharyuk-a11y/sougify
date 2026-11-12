@@ -11,7 +11,6 @@ export const orgProfileSchema = z.object({
   phone: z.string().trim().max(32, 'رقم الهاتف طويل جداً').optional().nullable(),
   email: z.union([z.string().trim().email('البريد الإلكتروني غير صالح'), z.literal('')]).optional().nullable(),
   address: z.string().trim().max(500, 'العنوان طويل جداً').optional().nullable(),
-  timezone: z.literal('Africa/Algiers'),
   enabled_modules: z.array(z.enum(MODULE_KEY_VALUES)),
 })
 
