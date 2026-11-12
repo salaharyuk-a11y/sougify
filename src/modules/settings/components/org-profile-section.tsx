@@ -20,6 +20,24 @@ import { Separator } from '@/components/ui/separator'
 import { updateOrgProfileAction } from '@/modules/settings/actions'
 import { orgProfileSchema, type OrgProfileInput } from '@/modules/settings/schemas'
 
+const MODULE_COPY: Record<ModuleKey, { name: string; description: string }> = {
+  catalog: { name: 'المنتجات والمخزون', description: 'إدارة المنتجات والتصنيفات والكميات.' },
+  orders: { name: 'الطلبات', description: 'متابعة الطلبات من الإنشاء إلى التسليم والمرتجعات.' },
+  pos: { name: 'نقطة البيع', description: 'تسجيل المبيعات المباشرة داخل المتجر.' },
+  customers: { name: 'العملاء', description: 'ملفات العملاء وسجل الطلبات وقائمة الحظر.' },
+  discounts: { name: 'التخفيضات', description: 'إنشاء أكواد الخصم والعروض الترويجية.' },
+  delivery: { name: 'التوصيل', description: 'مناطق التوصيل والسائقون ومتابعة الدفع عند الاستلام.' },
+  receipts: { name: 'الفواتير والإيصالات', description: 'طباعة الفواتير والإيصالات وملصقات الشحن.' },
+  cms: { name: 'إدارة المحتوى', description: 'إدارة صفحات المتجر والقوائم.' },
+  storefront: { name: 'واجهة المتجر', description: 'إعدادات المظهر والصفحات وتجربة الشراء.' },
+  reports: { name: 'التقارير', description: 'تقارير المبيعات والطلبات والتوصيل والأداء المالي.' },
+  expenses: { name: 'المصاريف', description: 'تسجيل مصاريف النشاط وتصنيفها.' },
+  reviews: { name: 'التقييمات', description: 'إدارة تقييمات العملاء ومراجعتها.' },
+  courses: { name: 'الدورات', description: 'إدارة الدورات والدروس والتسجيلات.' },
+  services: { name: 'الخدمات', description: 'إدارة الخدمات والعروض والمواعيد.' },
+  listings: { name: 'العقارات والإعلانات', description: 'إدارة العقارات والإعلانات واستفسارات المهتمين.' },
+}
+
 function OrgProfileSection({ org }: { org: Org }) {
   const form = useForm<OrgProfileInput>({
     resolver: zodResolver(orgProfileSchema),
@@ -125,8 +143,8 @@ function OrgProfileSection({ org }: { org: Org }) {
                         }}
                       />
                       <span className="flex flex-col gap-0.5">
-                        <span className="text-sm font-medium">{mod.name}</span>
-                        <span className="text-xs leading-5 text-muted-foreground">{mod.description}</span>
+                        <span className="text-sm font-medium">{MODULE_COPY[mod.key].name}</span>
+                        <span className="text-xs leading-5 text-muted-foreground">{MODULE_COPY[mod.key].description}</span>
                       </span>
                     </label>
                   )
