@@ -7,7 +7,6 @@ import {
   AlertCircle,
   ArrowLeft,
   ArrowRight,
-  Building2,
   Check,
   CheckIcon,
   GraduationCap,
@@ -125,7 +124,7 @@ export function CreateOrgStepper({ heading }: CreateOrgStepperProps) {
                         onChange={(event) => {
                           field.onChange(event)
                           if (!slugTouched) {
-                            form.setValue('slug', slugify(event.target.value), { shouldValidate: true })
+                            form.setValue('slug', slugify(event.target.value).replace(/[^a-z0-9-]/g, '').replace(/-+/g, '-').replace(/^-|-$/g, ''), { shouldValidate: true })
                           }
                         }}
                       />
