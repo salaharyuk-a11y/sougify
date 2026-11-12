@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import Link from 'next/link'
 import { ArrowUpLeft, Building2, ShieldCheck, Store } from 'lucide-react'
 
 import { requireUser } from '@/lib/auth'
@@ -59,12 +60,12 @@ export default async function OnboardingPage() {
 
       <div className="mx-auto flex w-full max-w-5xl flex-col">
         <header className="flex items-center justify-between border-b border-border pb-6">
-          <a href="/onboarding" className="inline-flex items-center gap-2.5 rounded-md" aria-label="Sougify">
+          <Link href="/onboarding" className="inline-flex items-center gap-2.5 rounded-md" aria-label="Sougify">
             <span className="flex size-9 items-center justify-center rounded-xl bg-primary text-primary-foreground">
               <Store className="size-5" aria-hidden="true" />
             </span>
             <span className="text-xl font-bold tracking-tight text-foreground">Sougify</span>
-          </a>
+          </Link>
           <div className="hidden items-center gap-2 text-xs text-muted-foreground sm:flex">
             <ShieldCheck className="size-4 text-primary" aria-hidden="true" />
             مساحة عملك، وبياناتك في مكان واحد
