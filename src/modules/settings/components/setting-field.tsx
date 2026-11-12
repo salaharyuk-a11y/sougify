@@ -49,6 +49,15 @@ function SettingField({ def, value, disabled, onChange, onValidityChange }: Sett
     lastEmitted.current = value
   }, [value])
 
+  if (def.type === 'info') {
+    return (
+      <div className="flex flex-col gap-1 border-b py-3 last:border-b-0">
+        <FieldLabel def={def} />
+        <p className="text-sm font-medium text-foreground">{String(def.default)}</p>
+      </div>
+    )
+  }
+
   if (def.type === 'boolean') {
     return (
       <div className="flex items-center justify-between gap-6 border-b py-3 last:border-b-0">
