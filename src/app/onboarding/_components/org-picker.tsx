@@ -55,7 +55,7 @@ export function OrgPicker({ memberships }: OrgPickerProps) {
                   <div className="mt-1 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                     <span>{label}</span>
                     <span aria-hidden="true">·</span>
-                    <span>{ROLE_LABELS[role] ?? role}</span>
+                    {role !== 'owner' ? <span>{ROLE_LABELS[role] ?? role}</span> : null}
                     {role === 'owner' ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[10px] font-medium text-primary">
                         <Crown className="size-3" aria-hidden="true" />
