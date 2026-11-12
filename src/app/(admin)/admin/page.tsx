@@ -1,5 +1,4 @@
 import type { ReactNode } from 'react'
-import { format } from 'date-fns'
 import { LayoutDashboard } from 'lucide-react'
 
 import { requireOrg } from '@/lib/auth'
