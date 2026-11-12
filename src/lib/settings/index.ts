@@ -1,31 +1,40 @@
 import { cache } from 'react'
-
 import { getAdminClient } from '@/lib/supabase/admin'
 import { DEFAULT_SETTINGS } from '@/lib/settings/registry'
 
 /**
- * One query for all of an org's settings, merged over DEFAULT_SETTINGS so
- * every SETTING_DEFS key always has a value. React cache() dedupes repeat
- * calls within one request tree. Uses the admin client so it's readable from
- * contexts without a full RLS session (e.g. storefront checkout).
+ * Legacy Bangladesh settings are deliberately normalized at read time.
+ * This keeps old rows intact for audit/history while preventing retired
+ * payment providers and language values from leaking into the Algeria UI.
  */
 export const getOrgSettings = cache(async (orgId: string): Promise<Record<string, unknown>> => {
   const supabase = getAdminClient()
-
-  const { data, error } = await supabase
-    .from('org_settings')
-    .select('key, value')
-    .eq('org_id', orgId)
-
+  const { data, error } = await supabase.from('org_settings').select('key, value').eq('org_id', orgId)
   const overrides: Record<string, unknown> = {}
 
   if (!error && data) {
-    for (const row of data as { key: string; value: unknown }[]) {
-      overrides[row.key] = row.value
-    }
+    for (const row of data as { key: string; value: unknown }[]) overrides[row.key] = row.value
   }
 
-  return { ...DEFAULT_SETTINGS, ...overrides }
+  const settings = { ...DEFAULT_SETTINGS, ...overrides }
+  const methods = settings['payments.methods']
+  if (Array.isArray(methods)) {
+    settings['payments.methods'] = methods.filter((method) => method === 'cod')
+    if ((settings['payments.methods'] as unknown[]).length === 0) settings['payments.methods'] = ['cod']
+  }
+
+  // Retired Bangladesh payment integrations remain in historical rows, but are never
+  // exposed or used by the Algeria-first checkout. COD is the only enabled v1 method.
+  settings['payments.cod_enabled'] = true
+  settings['payments.methods'] = ['cod']
+  settings['payments.manual_mfs.enabled'] = false
+  settings['payments.uddoktapay.enabled'] = false
+  settings['payments.advance_required'] = false
+  settings['fraud.provider'] = 'disabled'
+
+  // Map legacy language values to the supported Algeria storefront languages.
+  if (settings['localization.language'] !== 'fr') settings['localization.language'] = 'ar'
+  return settings
 })
 
 export function getSetting<T>(settings: Record<string, unknown>, key: string): T {

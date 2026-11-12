@@ -45,14 +45,14 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
   }
 
   return (
-    <header className="flex h-12 shrink-0 items-center justify-between gap-3 border-b border-border bg-background px-4">
+    <header dir="rtl" className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-background px-4">
       <div className="flex min-w-0 items-center gap-2">
         <Button
           variant="ghost"
           size="icon"
           className="md:hidden"
           onClick={onMenuClick}
-          aria-label="Open menu"
+          aria-label="فتح القائمة"
         >
           <Menu className="size-4" />
         </Button>
@@ -67,7 +67,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
           className="hidden gap-2 text-muted-foreground sm:flex"
         >
           <Search className="size-3.5" />
-          <span className="text-xs">Search</span>
+          <span className="text-xs">بحث</span>
           <kbd className="ml-2 rounded border border-border bg-muted px-1 text-[10px] font-medium">
             ⌘K
           </kbd>
@@ -77,7 +77,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
           size="icon"
           onClick={onSearchClick}
           className="sm:hidden"
-          aria-label="Search"
+          aria-label="بحث"
         >
           <Search className="size-4" />
         </Button>
@@ -100,7 +100,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onSelect={handleLogout}>تسجيل الخروج</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

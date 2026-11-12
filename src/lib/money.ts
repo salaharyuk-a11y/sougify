@@ -1,131 +1,83 @@
-// Money helpers. DB bigint paisa -> TS number paisa (1 taka = 100 paisa). No
-// float taka math — toPaisa parses via string math to avoid float artifacts.
+// Monetary values are stored as integer minor units (1 DZD = 100 centimes).
+// Keep arithmetic in integers and convert only when formatting for display.
 
-const TAKA_SYMBOL = '৳'
+const DZD_SYMBOL = 'دج'
 
-export function fromPaisa(paisa: number): number {
-  return paisa / 100
-}
+export function fromPaisa(minorUnits: number): number { return minorUnits / 100 }
 
-/**
- * Parses a taka amount (string or number) into integer paisa via string math
- * — avoids classic float-multiplication artifacts (e.g. 1234.5 * 100).
- * Rounds half-up on the 3rd decimal digit if more than 2 fraction digits are given.
- */
-export function toPaisa(taka: string | number): number {
-  const raw = String(taka).trim()
+/** Legacy function name retained for compatibility; values are generic minor units. */
+export function toPaisa(amount: string | number): number {
+  const raw = String(amount).trim()
   if (raw === '' || raw === '-') return 0
-
   const negative = raw.startsWith('-')
   const clean = (negative ? raw.slice(1) : raw).replace(/,/g, '')
-  const [wholeRaw, fracRaw = ''] = clean.split('.')
+  const [wholeRaw, fractionRaw = ''] = clean.split('.')
   const whole = wholeRaw === '' ? '0' : wholeRaw
-
-  const fracExtended = (fracRaw + '000').slice(0, 3)
-  const keep = fracExtended.slice(0, 2)
-  const roundUp = Number(fracExtended[2] ?? '0') >= 5
-
-  let paisa = Number(whole) * 100 + Number(keep === '' ? '0' : keep)
-  if (roundUp) paisa += 1
-
-  return negative ? -paisa : paisa
+  const fraction = (fractionRaw + '000').slice(0, 3)
+  let units = Number(whole) * 100 + Number(fraction.slice(0, 2))
+  if (Number(fraction[2] ?? '0') >= 5) units += 1
+  return negative ? -units : units
 }
 
-/** "৳1,234" — drops .00, shows decimals only when the paisa remainder is non-zero. */
-export function formatMoney(paisa: number, opts?: { symbol?: boolean }): string {
-  const showSymbol = opts?.symbol ?? true
-  const negative = paisa < 0
-  const abs = Math.abs(Math.round(paisa))
-  const whole = Math.floor(abs / 100)
-  const frac = abs % 100
-
-  const wholeFormatted = whole.toLocaleString('en-US')
-  const amount =
-    frac === 0 ? wholeFormatted : `${wholeFormatted}.${frac.toString().padStart(2, '0')}`
-
-  return `${negative ? '-' : ''}${showSymbol ? TAKA_SYMBOL : ''}${amount}`
+function formattedAmount(minorUnits: number): string {
+  const negative = minorUnits < 0
+  const absolute = Math.abs(Math.round(minorUnits))
+  const whole = Math.floor(absolute / 100)
+  const fraction = absolute % 100
+  const amount = whole.toLocaleString('fr-DZ')
+  return `${negative ? '-' : ''}${amount}${fraction ? `,${String(fraction).padStart(2, '0')}` : ''}`
 }
 
-const ONES = [
-  '', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine',
-  'ten', 'eleven', 'twelve', 'thirteen', 'fourteen', 'fifteen', 'sixteen',
-  'seventeen', 'eighteen', 'nineteen',
-]
-const TENS = ['', '', 'twenty', 'thirty', 'forty', 'fifty', 'sixty', 'seventy', 'eighty', 'ninety']
+/** Formats an integer amount stored in centimes as Algerian dinars. */
+export function formatMoney(minorUnits: number, opts?: { symbol?: boolean }): string {
+  const amount = formattedAmount(minorUnits)
+  return opts?.symbol === false ? amount : `${amount} ${DZD_SYMBOL}`
+}
 
-function threeDigitsToWords(n: number): string {
-  const parts: string[] = []
-  const hundreds = Math.floor(n / 100)
-  const rest = n % 100
-
-  if (hundreds) parts.push(`${ONES[hundreds]} hundred`)
-
-  if (rest) {
-    if (rest < 20) {
-      parts.push(ONES[rest])
-    } else {
-      const tensDigit = Math.floor(rest / 10)
-      const onesDigit = rest % 10
-      parts.push(onesDigit ? `${TENS[tensDigit]}-${ONES[onesDigit]}` : TENS[tensDigit])
-    }
+const ONES = ['zéro','un','deux','trois','quatre','cinq','six','sept','huit','neuf','dix','onze','douze','treize','quatorze','quinze','seize','dix-sept','dix-huit','dix-neuf']
+const TENS = ['','','vingt','trente','quarante','cinquante','soixante','soixante-dix','quatre-vingts','quatre-vingt-dix']
+function underThousand(n: number): string {
+  if (n < 20) return ONES[n]
+  if (n < 100) {
+    const ten = Math.floor(n / 10), unit = n % 10
+    if (ten === 7 || ten === 9) return `${TENS[ten - 1]}-${ONES[10 + unit]}`
+    return unit ? `${TENS[ten]}-${ONES[unit]}` : TENS[ten]
   }
-
-  return parts.join(' ')
+  const hundred = Math.floor(n / 100), rest = n % 100
+  return `${hundred === 1 ? 'cent' : `${ONES[hundred]} cent`}${rest ? ` ${underThousand(rest)}` : hundred > 1 ? 's' : ''}`
 }
-
-/** BD/Indian numbering: crore (1,00,00,000) / lakh (1,00,000) / thousand / hundred. */
-function integerToWordsBD(n: number): string {
-  if (n === 0) return 'zero'
-
-  const crore = Math.floor(n / 10000000)
-  const lakh = Math.floor((n % 10000000) / 100000)
-  const thousand = Math.floor((n % 100000) / 1000)
+function integerToWords(n: number): string {
+  if (n === 0) return 'zéro'
+  const billions = Math.floor(n / 1_000_000_000)
+  const millions = Math.floor((n % 1_000_000_000) / 1_000_000)
+  const thousands = Math.floor((n % 1_000_000) / 1000)
   const rest = n % 1000
-
   const parts: string[] = []
-  if (crore) parts.push(`${threeDigitsToWords(crore)} crore`)
-  if (lakh) parts.push(`${threeDigitsToWords(lakh)} lakh`)
-  if (thousand) parts.push(`${threeDigitsToWords(thousand)} thousand`)
-  if (rest) parts.push(threeDigitsToWords(rest))
-
+  if (billions) parts.push(`${underThousand(billions)} milliard${billions > 1 ? 's' : ''}`)
+  if (millions) parts.push(`${underThousand(millions)} million${millions > 1 ? 's' : ''}`)
+  if (thousands) parts.push(thousands === 1 ? 'mille' : `${underThousand(thousands)} mille`)
+  if (rest) parts.push(underThousand(rest))
   return parts.join(' ')
 }
 
-/** English amount-in-words for receipts, e.g. "One thousand five hundred taka". */
-export function moneyToWords(paisa: number): string {
-  const negative = paisa < 0
-  const abs = Math.abs(Math.round(paisa))
-  const whole = Math.floor(abs / 100)
-  const frac = abs % 100
-
-  let words = `${negative ? 'negative ' : ''}${integerToWordsBD(whole)} taka`
-  if (frac > 0) {
-    words += ` and ${integerToWordsBD(frac)} paisa`
-  }
-
+/** French wording for Algerian receipts, in dinars and centimes. */
+export function moneyToWords(minorUnits: number): string {
+  const negative = minorUnits < 0
+  const absolute = Math.abs(Math.round(minorUnits))
+  const dinars = Math.floor(absolute / 100)
+  const centimes = absolute % 100
+  const words = `${negative ? 'moins ' : ''}${integerToWords(dinars)} dinar${dinars > 1 ? 's' : ''}${centimes ? ` et ${integerToWords(centimes)} centime${centimes > 1 ? 's' : ''}` : ''}`
   return words.charAt(0).toUpperCase() + words.slice(1)
 }
 
-function trimTrailingZero(s: string): string {
-  return s.endsWith('.0') ? s.slice(0, -2) : s
-}
-
-/** Compact taka display: "1.2k" / "3.4L" (lakh) / "2.1Cr" (crore). No symbol by default. */
-export function formatCompact(paisa: number, opts?: { symbol?: boolean }): string {
-  const showSymbol = opts?.symbol ?? false
-  const negative = paisa < 0
-  const taka = Math.abs(paisa) / 100
-
-  let value: string
-  if (taka >= 10000000) {
-    value = `${trimTrailingZero((taka / 10000000).toFixed(1))}Cr`
-  } else if (taka >= 100000) {
-    value = `${trimTrailingZero((taka / 100000).toFixed(1))}L`
-  } else if (taka >= 1000) {
-    value = `${trimTrailingZero((taka / 1000).toFixed(1))}k`
-  } else {
-    value = trimTrailingZero(taka.toFixed(Number.isInteger(taka) ? 0 : 1))
-  }
-
-  return `${negative ? '-' : ''}${showSymbol ? TAKA_SYMBOL : ''}${value}`
+/** Compact DZD amount: 1,2 k / 1,2 M / 1,2 Md. */
+export function formatCompact(minorUnits: number, opts?: { symbol?: boolean }): string {
+  const value = Math.abs(minorUnits) / 100
+  const negative = minorUnits < 0 ? '-' : ''
+  let compact: string
+  if (value >= 1_000_000_000) compact = `${(value / 1_000_000_000).toLocaleString('fr-DZ', { maximumFractionDigits: 1 })} Md`
+  else if (value >= 1_000_000) compact = `${(value / 1_000_000).toLocaleString('fr-DZ', { maximumFractionDigits: 1 })} M`
+  else if (value >= 1_000) compact = `${(value / 1_000).toLocaleString('fr-DZ', { maximumFractionDigits: 1 })} k`
+  else compact = value.toLocaleString('fr-DZ', { maximumFractionDigits: 2 })
+  return `${negative}${compact}${opts?.symbol === false ? '' : ` ${DZD_SYMBOL}`}`
 }

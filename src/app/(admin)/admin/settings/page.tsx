@@ -12,23 +12,21 @@ export default async function SettingsPage() {
   requireRole(ctx, 'admin')
 
   const sections = [
-    { id: 'section-organization', label: 'Organization' },
+    { id: 'section-organization', label: 'المؤسسة' },
     ...SETTING_GROUPS.map((group) => ({ id: `section-${group}`, label: GROUP_LABELS[group] })),
   ]
 
   return (
-    <div>
+    <main dir="rtl" className="mx-auto w-full max-w-[1440px]">
       <PageHeader
-        title="Settings"
-        description="Organization profile, enabled modules, and platform behavior."
+        title="الإعدادات"
+        description="إدارة بيانات المؤسسة، وحدات العمل، وإعدادات تشغيل متجرك."
       />
 
-      <div className="flex items-start gap-8">
+      <div className="flex items-start gap-8 max-md:flex-col max-md:gap-4">
         <SettingsNav sections={sections} />
-
-        <div className="flex min-w-0 flex-1 flex-col gap-6 pb-16">
+        <div className="flex min-w-0 flex-1 flex-col gap-5 pb-16">
           <OrgProfileSection org={ctx.org} />
-
           {SETTING_GROUPS.map((group) => (
             <SettingsGroupSection
               key={group}
@@ -40,6 +38,6 @@ export default async function SettingsPage() {
           ))}
         </div>
       </div>
-    </div>
+    </main>
   )
 }

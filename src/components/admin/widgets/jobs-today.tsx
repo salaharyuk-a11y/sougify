@@ -44,16 +44,16 @@ export async function JobsTodayWidget() {
   }
 
   return (
-    <Card className="gap-3 p-4">
+    <Card dir="rtl" className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Jobs Today</CardTitle>
+        <CardTitle className="text-[13px]">مهام اليوم</CardTitle>
         <Link href="/admin/services" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {jobs.length === 0 ? (
-          <EmptyState icon={Wrench} title="No jobs scheduled today" className="py-8" />
+          <EmptyState icon={Wrench} title="لا توجد مهام مجدولة اليوم" className="py-8" />
         ) : (
           <ul className="flex flex-col gap-1">
             {jobs.map((job) => (

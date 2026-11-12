@@ -1,26 +1,12 @@
-// Settings engine registry (docs/architecture.md §5 — binding contract).
-// Settings UI (src/app/(admin)/admin/settings) renders groups from SETTING_DEFS.
+// Sougify settings registry — Algeria-first defaults and labels.
 import type { Role } from '@/types/db'
 
-export type SettingType = 'boolean' | 'number' | 'text' | 'select' | 'json'
-
+export type SettingType = 'boolean' | 'number' | 'text' | 'select' | 'json' | 'info'
 export type SettingGroup =
-  | 'checkout'
-  | 'payments'
-  | 'delivery'
-  | 'fraud'
-  | 'inventory'
-  | 'notifications'
-  | 'tax'
-  | 'localization'
-  | 'printing'
-  | 'storefront'
+  | 'checkout' | 'payments' | 'delivery' | 'fraud' | 'inventory'
+  | 'notifications' | 'tax' | 'localization' | 'printing' | 'storefront'
 
-export interface SettingOption {
-  value: string
-  label: string
-}
-
+export interface SettingOption { value: string; label: string }
 export interface SettingDef {
   key: string
   group: SettingGroup
@@ -29,288 +15,71 @@ export interface SettingDef {
   type: SettingType
   options?: SettingOption[]
   default: unknown
-  /** Roles allowed to view/edit this setting. Unset = any admin-side role. */
   roles?: Role[]
 }
 
 export const SETTING_GROUPS: SettingGroup[] = [
-  'checkout',
-  'payments',
-  'delivery',
-  'fraud',
-  'inventory',
-  'notifications',
-  'tax',
-  'localization',
-  'printing',
-  'storefront',
+  'checkout', 'payments', 'delivery', 'fraud', 'inventory',
+  'notifications', 'tax', 'localization', 'printing', 'storefront',
 ]
 
 export const SETTING_DEFS: SettingDef[] = [
-  // checkout ------------------------------------------------------------
+  { key: 'checkout.guest_enabled', group: 'checkout', label: 'السماح بالشراء دون حساب', type: 'boolean', default: true },
+  { key: 'checkout.min_order', group: 'checkout', label: 'الحد الأدنى للطلب (دج)', type: 'number', help: 'اترك القيمة 0 لتعطيل الحد الأدنى', default: 0 },
+
   {
-    key: 'checkout.guest_enabled',
-    group: 'checkout',
-    label: 'Allow guest checkout',
-    type: 'boolean',
-    default: true,
-  },
-  {
-    key: 'checkout.min_order',
-    group: 'checkout',
-    label: 'Minimum order amount (paisa)',
-    type: 'number',
-    default: 0,
+    key: 'payments.availability',
+    group: 'payments',
+    label: 'وسيلة الدفع المتاحة حالياً',
+    help: 'نعتمد الدفع عند الاستلام في النسخة الحالية. سيتم إضافة وسائل الدفع الإلكتروني بعد ربط مزود محلي موثوق واختباره.',
+    type: 'info',
+    default: 'الدفع عند الاستلام (COD)',
   },
 
-  // payments --------------------------------------------------------------
-  {
-    key: 'payments.cod_enabled',
-    group: 'payments',
-    label: 'Enable cash on delivery',
-    type: 'boolean',
-    default: true,
-  },
-  {
-    key: 'payments.advance_required',
-    group: 'payments',
-    label: 'Require advance payment',
-    type: 'boolean',
-    default: false,
-  },
-  {
-    key: 'payments.advance_amount',
-    group: 'payments',
-    label: 'Advance amount (paisa)',
-    help: 'Used when advance_type is "fixed"',
-    type: 'number',
-    default: 12000,
-  },
-  {
-    key: 'payments.advance_type',
-    group: 'payments',
-    label: 'Advance type',
-    type: 'select',
-    options: [
-      { value: 'fixed', label: 'Fixed amount' },
-      { value: 'percent', label: 'Percent of total' },
-    ],
-    default: 'fixed',
-  },
-  {
-    key: 'payments.methods',
-    group: 'payments',
-    label: 'Enabled payment methods',
-    help: 'Subset of cod, bkash, nagad, uddoktapay, sslcommerz, bank, cash',
-    type: 'json',
-    default: ['cod', 'bkash', 'nagad'],
-  },
-  {
-    key: 'payments.uddoktapay.enabled',
-    group: 'payments',
-    label: 'Enable UddoktaPay',
-    type: 'boolean',
-    default: false,
-  },
-  {
-    key: 'payments.uddoktapay.api_key',
-    group: 'payments',
-    label: 'UddoktaPay API key',
-    type: 'text',
-    default: '',
-    roles: ['owner', 'admin'],
-  },
-  {
-    key: 'payments.uddoktapay.base_url',
-    group: 'payments',
-    label: 'UddoktaPay base URL',
-    type: 'text',
-    default: '',
-    roles: ['owner', 'admin'],
-  },
-  {
-    key: 'payments.manual_mfs.enabled',
-    group: 'payments',
-    label: 'Enable manual bKash/Nagad',
-    type: 'boolean',
-    default: true,
-  },
-  {
-    key: 'payments.manual_mfs.numbers',
-    group: 'payments',
-    label: 'Manual MFS receiving numbers',
-    help: 'Shown at checkout so customers know where to send money',
-    type: 'json',
-    default: { bkash: '', nagad: '' },
-  },
+  { key: 'delivery.default_zone_fallback', group: 'delivery', label: 'سعر التوصيل الافتراضي (دج)', type: 'number', help: 'يُستخدم عندما لا توجد منطقة توصيل مطابقة', default: 0 },
+  { key: 'delivery.free_above', group: 'delivery', label: 'توصيل مجاني ابتداءً من (دج)', type: 'number', help: 'القيمة 0 تعطل التوصيل المجاني', default: 0 },
 
-  // delivery ----------------------------------------------------------------
+  { key: 'fraud.enabled', group: 'fraud', label: 'تفعيل مؤشرات كشف الطلبات المشبوهة', type: 'boolean', default: false },
   {
-    key: 'delivery.default_zone_fallback',
-    group: 'delivery',
-    label: 'Fallback delivery charge (paisa)',
-    help: 'Used when the customer district matches no configured delivery zone',
-    type: 'number',
-    default: 0,
-  },
-  {
-    key: 'delivery.free_above',
-    group: 'delivery',
-    label: 'Free delivery above (paisa)',
-    help: '0 disables free delivery',
-    type: 'number',
-    default: 0,
-  },
-
-  // fraud ---------------------------------------------------------------
-  {
-    key: 'fraud.enabled',
-    group: 'fraud',
-    label: 'Enable fraud checks',
-    type: 'boolean',
-    default: false,
-  },
-  {
-    key: 'fraud.provider',
-    group: 'fraud',
-    label: 'Fraud provider',
-    type: 'select',
-    options: [
-      { value: 'fraudbd', label: 'FraudBD' },
-      { value: 'disabled', label: 'Disabled' },
-    ],
+    key: 'fraud.provider', group: 'fraud', label: 'مصدر فحص المخاطر', type: 'select',
+    options: [{ value: 'disabled', label: 'غير مفعّل' }],
     default: 'disabled',
   },
   {
-    key: 'fraud.high_risk_action',
-    group: 'fraud',
-    label: 'Action on high-risk orders',
-    type: 'select',
-    options: [
-      { value: 'block', label: 'Block order' },
-      { value: 'require_full_advance', label: 'Require full advance' },
-      { value: 'flag', label: 'Flag only' },
-    ],
+    key: 'fraud.high_risk_action', group: 'fraud', label: 'الإجراء عند ارتفاع مستوى المخاطر', type: 'select',
+    options: [{ value: 'block', label: 'رفض الطلب' }, { value: 'require_full_advance', label: 'طلب دفع مسبق كامل' }, { value: 'flag', label: 'وضع علامة للمراجعة فقط' }],
     default: 'flag',
   },
 
-  // inventory -----------------------------------------------------------
-  {
-    key: 'inventory.track_stock',
-    group: 'inventory',
-    label: 'Track stock levels',
-    type: 'boolean',
-    default: true,
-  },
-  {
-    key: 'inventory.allow_backorder',
-    group: 'inventory',
-    label: 'Allow backorders',
-    type: 'boolean',
-    default: false,
-  },
-  {
-    key: 'inventory.low_stock_threshold',
-    group: 'inventory',
-    label: 'Low stock threshold',
-    type: 'number',
-    default: 5,
-  },
+  { key: 'inventory.track_stock', group: 'inventory', label: 'متابعة كميات المخزون', type: 'boolean', default: true },
+  { key: 'inventory.allow_backorder', group: 'inventory', label: 'السماح ببيع المنتجات غير المتوفرة', type: 'boolean', default: false },
+  { key: 'inventory.low_stock_threshold', group: 'inventory', label: 'حد التنبيه عند انخفاض المخزون', type: 'number', default: 5 },
 
-  // notifications -------------------------------------------------------
-  {
-    key: 'notifications.events',
-    group: 'notifications',
-    label: 'Notification channels per event',
-    help: 'Map of event name to channel list. Events not listed default to ["inapp"].',
-    type: 'json',
-    default: {},
-  },
+  { key: 'notifications.events', group: 'notifications', label: 'قنوات الإشعارات حسب الحدث', help: 'إعداد متقدم بصيغة JSON. الأحداث غير المحددة تستخدم إشعارات داخل المنصة.', type: 'json', default: {} },
 
-  // tax -------------------------------------------------------------------
   {
-    key: 'tax.mode',
-    group: 'tax',
-    label: 'Tax mode',
-    type: 'select',
-    options: [
-      { value: 'none', label: 'None' },
-      { value: 'inclusive', label: 'Inclusive' },
-      { value: 'exclusive', label: 'Exclusive' },
-    ],
+    key: 'tax.mode', group: 'tax', label: 'طريقة احتساب الضريبة', type: 'select',
+    options: [{ value: 'none', label: 'غير مفعّلة' }, { value: 'inclusive', label: 'السعر شامل الضريبة' }, { value: 'exclusive', label: 'إضافة الضريبة إلى السعر' }],
     default: 'none',
   },
+  { key: 'tax.vat_rate', group: 'tax', label: 'نسبة الرسم على القيمة المضافة (%)', help: 'النسبة المرجعية العامة 19%، وقد تختلف المعاملة حسب طبيعة النشاط والإعفاءات. راجع محاسبك قبل تفعيلها.', type: 'number', default: 19 },
+
   {
-    key: 'tax.vat_rate',
-    group: 'tax',
-    label: 'VAT rate (%)',
-    type: 'number',
-    default: 15,
-  },
-  {
-    key: 'tax.mushak_enabled',
-    group: 'tax',
-    label: 'Enable Mushak 6.3',
-    type: 'boolean',
-    default: false,
+    key: 'localization.language', group: 'localization', label: 'لغة المتجر الافتراضية', type: 'select',
+    options: [{ value: 'ar', label: 'العربية' }, { value: 'fr', label: 'Français' }],
+    default: 'ar',
   },
 
-  // localization ----------------------------------------------------------
   {
-    key: 'localization.language',
-    group: 'localization',
-    label: 'Default language',
-    type: 'select',
-    options: [
-      { value: 'en', label: 'English' },
-      { value: 'bn', label: 'Bengali' },
-    ],
-    default: 'en',
-  },
-
-  // printing ------------------------------------------------------------
-  {
-    key: 'printing.invoice_template',
-    group: 'printing',
-    label: 'Invoice template',
-    type: 'select',
-    options: [
-      { value: 'a4_default', label: 'A4 default' },
-      { value: 'a4_mushak', label: 'A4 with Mushak 6.3' },
-    ],
+    key: 'printing.invoice_template', group: 'printing', label: 'قالب الفاتورة', type: 'select',
+    options: [{ value: 'a4_default', label: 'A4 قياسي' }],
     default: 'a4_default',
   },
-  {
-    key: 'printing.footer_text',
-    group: 'printing',
-    label: 'Print footer text',
-    type: 'text',
-    default: '',
-  },
+  { key: 'printing.footer_text', group: 'printing', label: 'النص أسفل الفاتورة', type: 'text', default: '' },
 
-  // storefront ------------------------------------------------------------
-  {
-    key: 'storefront.announcement',
-    group: 'storefront',
-    label: 'Announcement bar text',
-    help: 'Empty hides the bar',
-    type: 'text',
-    default: '',
-  },
-  {
-    key: 'storefront.whatsapp_number',
-    group: 'storefront',
-    label: 'WhatsApp float button number',
-    type: 'text',
-    default: '',
-  },
-  {
-    key: 'storefront.primary_color',
-    group: 'storefront',
-    label: 'Storefront accent color',
-    type: 'text',
-    default: '#059669',
-  },
+  { key: 'storefront.announcement', group: 'storefront', label: 'نص شريط الإعلان', help: 'اتركه فارغاً لإخفاء الشريط', type: 'text', default: '' },
+  { key: 'storefront.whatsapp_number', group: 'storefront', label: 'رقم واتساب للزر العائم', type: 'text', default: '' },
+  { key: 'storefront.primary_color', group: 'storefront', label: 'اللون الرئيسي للمتجر', type: 'text', default: '#059669' },
 ]
 
 export const DEFAULT_SETTINGS: Record<string, unknown> = Object.fromEntries(

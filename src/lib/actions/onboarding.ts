@@ -13,9 +13,9 @@ import type { Json, Org } from '@/types/db'
 
 import { createOrgSchema, type CreateOrgInput } from './onboarding-schemas'
 
-/** doc_sequences seed rows (docs/architecture.md §3 / §9). */
+/** Document sequence prefixes for a newly created Sougify organization. */
 const DOC_SEQUENCES: { doc_type: string; prefix: string }[] = [
-  { doc_type: 'order', prefix: 'SCR-' },
+  { doc_type: 'order', prefix: 'SOU-' },
   { doc_type: 'invoice', prefix: 'INV-' },
   { doc_type: 'delivery', prefix: 'DLV-' },
   { doc_type: 'return', prefix: 'RET-' },
@@ -23,17 +23,8 @@ const DOC_SEQUENCES: { doc_type: string; prefix: string }[] = [
 ]
 
 /**
- * Creates a new org for the current user (owner membership + doc numbering +
- * default settings + optional demo data), then activates it.
- *
- * Uses the admin (service-role) client throughout, not just for the org row:
- * supabase/migrations/0001_core.sql's org_members RLS policy has no "insert
- * your own first membership" carve-out (a brand-new org has no members yet,
- * so has_org_role() can't pass) — the migration's own comment says this
- * bootstrap sequence is expected to run "in the same service-role
- * transaction". This action is that transaction (best-effort: Supabase JS has
- * no cross-call transaction, so failures after the org row exists return an
- * error but do not roll back earlier inserts).
+ * Creates an organization for the signed-in user, then activates it.
+ * Existing organizations and their records are not modified by this action.
  */
 export async function createOrgAction(input: CreateOrgInput): Promise<ActionResult> {
   const user = await requireUser()
@@ -65,7 +56,9 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
         slug,
         vertical,
         phone,
-        currency: 'BDT',
+        country: 'DZ',
+        currency: 'DZD',
+        timezone: 'Africa/Algiers',
         enabled_modules: VERTICAL_PRESETS[vertical].modules,
       })
       .select('*')
@@ -109,9 +102,6 @@ export async function createOrgAction(input: CreateOrgInput): Promise<ActionResu
     try {
       await seedDemoData(admin, org)
     } catch (err) {
-      // Demo content is a nice-to-have, not a hard requirement — the org
-      // itself is already created successfully, so this never fails the
-      // whole action.
       console.error('[createOrgAction] demo seed failed', err)
     }
   }

@@ -10,17 +10,17 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { updateSettingsAction } from '@/modules/settings/actions'
 import { SettingField } from './setting-field'
 
-const GROUP_LABELS: Record<SettingGroup, string> = {
-  checkout: 'Checkout',
-  payments: 'Payments',
-  delivery: 'Delivery',
-  fraud: 'Fraud',
-  inventory: 'Inventory',
-  notifications: 'Notifications',
-  tax: 'Tax',
-  localization: 'Localization',
-  printing: 'Printing',
-  storefront: 'Storefront',
+export const GROUP_LABELS: Record<SettingGroup, string> = {
+  checkout: 'إتمام الطلب',
+  payments: 'الدفع',
+  delivery: 'التوصيل',
+  fraud: 'مكافحة الطلبات الوهمية',
+  inventory: 'المخزون',
+  notifications: 'الإشعارات',
+  tax: 'الضرائب',
+  localization: 'اللغة والمنطقة',
+  printing: 'الطباعة والفواتير',
+  storefront: 'واجهة المتجر',
 }
 
 interface SettingsGroupSectionProps {
@@ -39,22 +39,22 @@ function SettingsGroupSection({ group, defs, initialValues, role }: SettingsGrou
   const dirtyKeys = visibleDefs
     .map((def) => def.key)
     .filter((key) => JSON.stringify(values[key]) !== JSON.stringify(initialValues[key]))
-
   const isDirty = dirtyKeys.length > 0
   const hasErrors = invalidKeys.size > 0
 
   if (visibleDefs.length === 0) return null
 
   async function handleSave() {
+    if (!dirtyKeys.length) return
     setSaving(true)
     try {
-      const entries = dirtyKeys.map((key) => ({ key, value: values[key] }))
-      const result = await updateSettingsAction({ entries })
-      if (result.ok) {
-        toast.success(`${GROUP_LABELS[group]} settings saved`)
-      } else {
-        toast.error(result.error)
-      }
+      const result = await updateSettingsAction({
+        entries: dirtyKeys.map((key) => ({ key, value: values[key] })),
+      })
+      if (result.ok) toast.success('تم حفظ الإعدادات')
+      else toast.error(result.error)
+    } catch {
+      toast.error('تعذر حفظ الإعدادات. حاول مرة أخرى.')
     } finally {
       setSaving(false)
     }
@@ -62,10 +62,10 @@ function SettingsGroupSection({ group, defs, initialValues, role }: SettingsGrou
 
   return (
     <Card id={`section-${group}`} className="scroll-mt-6">
-      <CardHeader className="flex-row items-center justify-between">
+      <CardHeader className="flex-row items-center justify-between gap-3">
         <CardTitle className="text-base">{GROUP_LABELS[group]}</CardTitle>
         <Button size="sm" disabled={!isDirty || hasErrors || saving} onClick={handleSave}>
-          {saving ? 'Saving…' : 'Save changes'}
+          {saving ? 'جارٍ الحفظ…' : 'حفظ التغييرات'}
         </Button>
       </CardHeader>
       <CardContent>
@@ -93,4 +93,4 @@ function SettingsGroupSection({ group, defs, initialValues, role }: SettingsGrou
   )
 }
 
-export { SettingsGroupSection, GROUP_LABELS }
+export { SettingsGroupSection }
