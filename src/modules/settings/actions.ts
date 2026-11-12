@@ -12,6 +12,7 @@ const SETTING_DEFS_BY_KEY = new Map<string, SettingDef>(SETTING_DEFS.map((def) =
 
 function validateSettingValue(def: SettingDef, value: unknown): string | null {
   switch (def.type) {
+    case 'info': return 'هذا الإعداد للعرض فقط'
     case 'boolean': return typeof value === 'boolean' ? null : `${def.label}: قيمة غير صالحة`
     case 'number': return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? null : `${def.label}: أدخل رقماً صالحاً`
     case 'text': return typeof value === 'string' ? null : `${def.label}: نص غير صالح`
