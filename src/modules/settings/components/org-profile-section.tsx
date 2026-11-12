@@ -46,7 +46,6 @@ function OrgProfileSection({ org }: { org: Org }) {
       phone: org.phone ?? '',
       email: org.email ?? '',
       address: org.address ?? '',
-      timezone: 'Africa/Algiers',
       enabled_modules: org.enabled_modules as ModuleKey[],
     },
   })
@@ -62,6 +61,7 @@ function OrgProfileSection({ org }: { org: Org }) {
   }
 
   const enabledModules = form.watch('enabled_modules')
+  const needsLocalizationMigration = org.currency !== 'DZD' || org.timezone !== 'Africa/Algiers'
 
   return (
     <Card id="section-organization" className="scroll-mt-6">
@@ -157,7 +157,7 @@ function OrgProfileSection({ org }: { org: Org }) {
             </section>
 
             <div className="flex justify-start">
-              <Button type="submit" disabled={!form.formState.isDirty || form.formState.isSubmitting}>
+              <Button type="submit" disabled={(!form.formState.isDirty && !needsLocalizationMigration) || form.formState.isSubmitting}>
                 {form.formState.isSubmitting ? 'جارٍ الحفظ…' : 'حفظ بيانات المؤسسة'}
               </Button>
             </div>
