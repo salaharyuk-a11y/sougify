@@ -92,3 +92,5 @@ function SettingsGroupSection({ group, defs, initialValues, role }: SettingsGrou
     </Card>
   )
 }
+
+export { SettingsGroupSection }
