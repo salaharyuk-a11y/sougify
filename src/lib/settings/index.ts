@@ -23,9 +23,17 @@ export const getOrgSettings = cache(async (orgId: string): Promise<Record<string
     if ((settings['payments.methods'] as unknown[]).length === 0) settings['payments.methods'] = ['cod']
   }
 
-  // Old English/Bengali values are not valid for the Algeria-first storefront.
+  // Retired Bangladesh payment integrations remain in historical rows, but are never
+  // exposed or used by the Algeria-first checkout. COD is the only enabled v1 method.
+  settings['payments.cod_enabled'] = true
+  settings['payments.methods'] = ['cod']
+  settings['payments.manual_mfs.enabled'] = false
+  settings['payments.uddoktapay.enabled'] = false
+  settings['payments.advance_required'] = false
+  settings['fraud.provider'] = 'disabled'
+
+  // Map legacy language values to the supported Algeria storefront languages.
   if (settings['localization.language'] !== 'fr') settings['localization.language'] = 'ar'
-  if (settings['fraud.provider'] !== 'disabled') settings['fraud.provider'] = 'disabled'
   return settings
 })
 
