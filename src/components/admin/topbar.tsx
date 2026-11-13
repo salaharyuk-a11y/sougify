@@ -45,7 +45,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
   }
 
   return (
-    <header dir="rtl" className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border bg-background px-4">
+    <header dir="rtl" className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-3 border-b border-border/80 bg-background/95 px-4 backdrop-blur sm:px-6">
       <div className="flex min-w-0 items-center gap-2">
         <Button
           variant="ghost"
@@ -56,7 +56,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
         >
           <Menu className="size-4" />
         </Button>
-        <span className="truncate text-sm font-medium text-foreground">{orgName}</span>
+        <div className="flex min-w-0 flex-col leading-tight"><span className="truncate text-sm font-semibold text-foreground">{orgName}</span><span className="text-[11px] text-muted-foreground">مساحة العمل</span></div>
       </div>
 
       <div className="flex items-center gap-1">
@@ -67,7 +67,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
           className="hidden gap-2 text-muted-foreground sm:flex"
         >
           <Search className="size-3.5" />
-          <span className="text-xs">بحث</span>
+          <span className="text-xs">بحث في Sougify</span>
           <kbd className="ml-2 rounded border border-border bg-muted px-1 text-[10px] font-medium">
             ⌘K
           </kbd>
