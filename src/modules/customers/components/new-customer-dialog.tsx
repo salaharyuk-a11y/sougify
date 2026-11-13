@@ -63,7 +63,7 @@ export function NewCustomerDialog() {
     >
       <DialogTrigger asChild>
         <Button>
-          <Plus /> New customer
+          <Plus /> إضافة عميل
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
