@@ -32,17 +32,17 @@ export function CustomersTable({ customers }: CustomersTableProps) {
     () => [
       {
         accessorKey: 'name',
-        header: 'Name',
+        header: 'الاسم',
         cell: ({ row }) => (
           <div className="flex items-center gap-2">
             <span className="font-medium">{row.original.name}</span>
-            {row.original.is_blocked ? <Badge variant="destructive">Blocked</Badge> : null}
+            {row.original.is_blocked ? <Badge variant="destructive">محظور</Badge> : null}
           </div>
         ),
       },
       {
         accessorKey: 'phone',
-        header: 'Phone',
+        header: 'رقم الهاتف',
         cell: ({ row }) => (
           <div className="flex items-center gap-1">
             <span className="tabular-nums">{row.original.phone}</span>
@@ -54,23 +54,23 @@ export function CustomersTable({ customers }: CustomersTableProps) {
       },
       {
         accessorKey: 'orders_count',
-        header: 'Orders',
+        header: 'الطلبات',
         cell: ({ row }) => <span className="tabular-nums">{row.original.orders_count}</span>,
       },
       {
         accessorKey: 'total_spent',
-        header: 'Total spent',
+        header: 'إجمالي المشتريات',
         cell: ({ row }) => <span className="tabular-nums">{formatMoney(row.original.total_spent)}</span>,
       },
       {
         accessorKey: 'last_order_at',
-        header: 'Last order',
+        header: 'آخر طلب',
         cell: ({ row }) =>
-          row.original.last_order_at ? format(new Date(row.original.last_order_at), 'd MMM yyyy') : '—',
+          row.original.last_order_at ? new Intl.DateTimeFormat('ar-DZ', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(row.original.last_order_at)) : '—',
       },
       {
         id: 'tags',
-        header: 'Tags',
+        header: 'التصنيفات',
         cell: ({ row }) => {
           const tags = row.original.tags ?? []
           if (tags.length === 0) return null
@@ -97,7 +97,7 @@ export function CustomersTable({ customers }: CustomersTableProps) {
       <SearchInput
         value={search}
         onChange={setSearch}
-        placeholder="Search by name or phone..."
+        placeholder="ابحث بالاسم أو رقم الهاتف..."
         className="max-w-sm"
       />
       <DataTable
@@ -107,8 +107,8 @@ export function CustomersTable({ customers }: CustomersTableProps) {
         emptyState={
           <EmptyState
             icon={Users}
-            title="No customers yet"
-            description="Customers will appear here once created."
+            title="لا يوجد عملاء بعد"
+            description="سيظهر العملاء هنا عند إضافتهم أو تسجيل أول طلباتهم."
           />
         }
       />
