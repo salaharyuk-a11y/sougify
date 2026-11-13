@@ -9,16 +9,16 @@ import { SearchInput } from '@/components/ui/search-input'
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const STATUS_TABS = [
-  { value: 'all', label: 'All' },
-  { value: 'pending', label: 'Pending' },
-  { value: 'confirmed', label: 'Confirmed' },
-  { value: 'packed', label: 'Packed' },
-  { value: 'dispatched', label: 'Dispatched' },
-  { value: 'delivered', label: 'Delivered' },
-  { value: 'completed', label: 'Completed' },
-  { value: 'cancelled', label: 'Cancelled' },
-  { value: 'returned', label: 'Returned' },
-  { value: 'failed', label: 'Failed' },
+  { value: 'all', label: 'الكل' },
+  { value: 'pending', label: 'قيد الانتظار' },
+  { value: 'confirmed', label: 'مؤكد' },
+  { value: 'packed', label: 'قيد التجهيز' },
+  { value: 'dispatched', label: 'خرج للتوصيل' },
+  { value: 'delivered', label: 'تم التوصيل' },
+  { value: 'completed', label: 'مكتمل' },
+  { value: 'cancelled', label: 'ملغى' },
+  { value: 'returned', label: 'مُرجع' },
+  { value: 'failed', label: 'فشل' },
 ] as const
 
 interface OrdersFilterBarProps {
@@ -53,10 +53,10 @@ function OrdersFilterBar({ status, q, from, to }: OrdersFilterBarProps) {
       </Tabs>
       <div className="flex flex-wrap items-end gap-3">
         <div className="w-64">
-          <SearchInput value={q} onChange={(v) => setParam('q', v)} placeholder="Order no. or phone" />
+          <SearchInput value={q} onChange={(v) => setParam('q', v)} placeholder="رقم الطلب أو رقم الهاتف" />
         </div>
         <div className="flex flex-col gap-1">
-          <Label htmlFor="orders-from">From</Label>
+          <Label htmlFor="orders-from">من تاريخ</Label>
           <Input
             id="orders-from"
             type="date"
@@ -66,7 +66,7 @@ function OrdersFilterBar({ status, q, from, to }: OrdersFilterBarProps) {
           />
         </div>
         <div className="flex flex-col gap-1">
-          <Label htmlFor="orders-to">To</Label>
+          <Label htmlFor="orders-to">إلى تاريخ</Label>
           <Input id="orders-to" type="date" value={to} onChange={(e) => setParam('to', e.target.value)} className="w-36" />
         </div>
       </div>
