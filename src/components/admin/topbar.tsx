@@ -27,7 +27,9 @@ interface TopbarProps {
   onSearchClick: () => void
 }
 
-const ROLE_LABEL_AR: Record<string, string> = { owner: 'مالك المؤسسة', admin: 'مدير', manager: 'مشرف', staff: 'موظف', accountant: 'محاسب' }\n\nfunction initialsOf(name: string): string {
+const ROLE_LABEL_AR: Record<string, string> = { owner: 'مالك المؤسسة', admin: 'مدير', manager: 'مشرف', staff: 'موظف', accountant: 'محاسب' }
+
+function initialsOf(name: string): string {
   const initials = name
     .trim()
     .split(/\s+/)
@@ -96,7 +98,7 @@ export function Topbar({ orgName, user, role, unreadCount, onMenuClick, onSearch
               <span className="text-sm font-medium text-foreground">{user.name}</span>
               <span className="truncate text-xs text-muted-foreground">{user.email}</span>
               <span className="text-2xs font-medium tracking-wide text-muted-foreground uppercase">
-                {role}
+                {ROLE_LABEL_AR[role] ?? role}
               </span>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
