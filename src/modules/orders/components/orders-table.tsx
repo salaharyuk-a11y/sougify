@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import type { ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import { Circle, ShoppingCart } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -78,9 +77,9 @@ function OrdersTable({ data }: OrdersTableProps) {
       )
       const failed = results.filter((r) => !r.ok).length
       if (failed > 0) {
-        toast.error(تعذر تأكيد ${failed} من أصل ${ids.length} طلب)
+        toast.error(`تعذر تأكيد ${failed} من أصل ${ids.length} طلب`)
       } else {
-        toast.success(تم تأكيد ${ids.length} طلب)
+        toast.success(`تم تأكيد ${ids.length} طلب`)
       }
       setSelected(new Set())
       router.refresh()
