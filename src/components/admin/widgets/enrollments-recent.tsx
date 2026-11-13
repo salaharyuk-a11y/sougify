@@ -39,14 +39,14 @@ export async function EnrollmentsRecentWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Recent Enrollments</CardTitle>
+        <CardTitle className="text-[13px]">آخر التسجيلات</CardTitle>
         <Link href="/admin/courses" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {enrollments.length === 0 ? (
-          <EmptyState icon={GraduationCap} title="No enrollments yet" className="py-8" />
+          <EmptyState icon={GraduationCap} title="لا توجد تسجيلات بعد" className="py-8" />
         ) : (
           <ul className="flex flex-col gap-1">
             {enrollments.map((enrollment) => (
@@ -56,9 +56,9 @@ export async function EnrollmentsRecentWidget() {
                   className="flex items-center justify-between gap-2 rounded-md px-1.5 py-1 text-[13px] transition-colors hover:bg-accent"
                 >
                   <span className="min-w-0 flex-1 truncate text-foreground">
-                    {enrollment.courses?.title ?? 'Course'}{' '}
+                    {enrollment.courses?.title ?? 'دورة'}{' '}
                     <span className="text-muted-foreground">
-                      · {enrollment.customers?.name ?? 'Customer'}
+                      · {enrollment.customers?.name ?? 'عميل'}
                     </span>
                   </span>
                   <span className="shrink-0 text-2xs text-muted-foreground">
