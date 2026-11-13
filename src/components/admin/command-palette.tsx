@@ -22,6 +22,19 @@ interface QuickAction {
   icon: LucideIcon
 }
 
+const NAV_LABELS_AR: Record<string, string> = {
+  Dashboard: 'لوحة التحكم', Catalog: 'الكتالوج', Products: 'المنتجات',
+  Categories: 'التصنيفات', Inventory: 'المخزون', Orders: 'الطلبات',
+  Returns: 'المرتجعات', POS: 'نقطة البيع', Delivery: 'التوصيل',
+  Deliveries: 'الشحنات', Zones: 'مناطق التوصيل', Riders: 'المندوبون',
+  COD: 'الدفع عند الاستلام', Receipts: 'الإيصالات', Customers: 'العملاء',
+  Discounts: 'التخفيضات', Reviews: 'التقييمات', CMS: 'إدارة المحتوى',
+  Pages: 'الصفحات', Menus: 'القوائم', Storefront: 'واجهة المتجر',
+  Reports: 'التقارير', Expenses: 'المصاريف', Media: 'الوسائط',
+  Staff: 'فريق العمل', 'Audit Log': 'سجل النشاط', Settings: 'الإعدادات',
+  Services: 'الخدمات', Courses: 'الدورات', Listings: 'العقارات',
+}
+
 const QUICK_ACTION_DEFS: (QuickAction & { moduleKey: string })[] = [
   { label: 'منتج جديد', href: '/admin/products/new', icon: FilePlus, moduleKey: 'catalog' },
   { label: 'طلب جديد', href: '/admin/orders/new', icon: ShoppingCart, moduleKey: 'orders' },
