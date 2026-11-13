@@ -27,7 +27,7 @@ interface TopbarProps {
   onSearchClick: () => void
 }
 
-function initialsOf(name: string): string {
+const ROLE_LABEL_AR: Record<string, string> = { owner: 'مالك المؤسسة', admin: 'مدير', manager: 'مشرف', staff: 'موظف', accountant: 'محاسب' }\n\nfunction initialsOf(name: string): string {
   const initials = name
     .trim()
     .split(/\s+/)
