@@ -22,10 +22,23 @@ interface QuickAction {
   icon: LucideIcon
 }
 
+const NAV_LABELS_AR: Record<string, string> = {
+  Dashboard: 'لوحة التحكم', Catalog: 'الكتالوج', Products: 'المنتجات',
+  Categories: 'التصنيفات', Inventory: 'المخزون', Orders: 'الطلبات',
+  Returns: 'المرتجعات', POS: 'نقطة البيع', Delivery: 'التوصيل',
+  Deliveries: 'الشحنات', Zones: 'مناطق التوصيل', Riders: 'المندوبون',
+  COD: 'الدفع عند الاستلام', Receipts: 'الإيصالات', Customers: 'العملاء',
+  Discounts: 'التخفيضات', Reviews: 'التقييمات', CMS: 'إدارة المحتوى',
+  Pages: 'الصفحات', Menus: 'القوائم', Storefront: 'واجهة المتجر',
+  Reports: 'التقارير', Expenses: 'المصاريف', Media: 'الوسائط',
+  Staff: 'فريق العمل', 'Audit Log': 'سجل النشاط', Settings: 'الإعدادات',
+  Services: 'الخدمات', Courses: 'الدورات', Listings: 'العقارات',
+}
+
 const QUICK_ACTION_DEFS: (QuickAction & { moduleKey: string })[] = [
-  { label: 'New product', href: '/admin/products/new', icon: FilePlus, moduleKey: 'catalog' },
-  { label: 'New order', href: '/admin/orders/new', icon: ShoppingCart, moduleKey: 'orders' },
-  { label: 'POS', href: '/admin/pos', icon: CreditCard, moduleKey: 'pos' },
+  { label: 'منتج جديد', href: '/admin/products/new', icon: FilePlus, moduleKey: 'catalog' },
+  { label: 'طلب جديد', href: '/admin/orders/new', icon: ShoppingCart, moduleKey: 'orders' },
+  { label: 'نقطة البيع', href: '/admin/pos', icon: CreditCard, moduleKey: 'pos' },
 ]
 
 interface CommandPaletteProps {
@@ -63,12 +76,12 @@ export function CommandPalette({ open, onOpenChange, nav, enabledModules }: Comm
 
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
-      <CommandInput placeholder="Search pages, or jump to an action…" />
+      <CommandInput placeholder="ابحث عن صفحة أو إجراء..." />
       <CommandList>
-        <CommandEmpty>No results found.</CommandEmpty>
+        <CommandEmpty>لا توجد نتائج مطابقة.</CommandEmpty>
         {quickActions.length > 0 && (
           <>
-            <CommandGroup heading="Quick actions">
+            <CommandGroup heading="إجراءات سريعة">
               {quickActions.map((action) => (
                 <CommandItem key={action.href} value={action.label} onSelect={() => go(action.href)}>
                   <action.icon className="size-4" />
@@ -79,13 +92,13 @@ export function CommandPalette({ open, onOpenChange, nav, enabledModules }: Comm
             <CommandSeparator />
           </>
         )}
-        <CommandGroup heading="Go to">
+        <CommandGroup heading="الانتقال إلى">
           {allNav.map((item) => {
             const Icon = getIcon(item.icon)
             return (
               <CommandItem key={item.href} value={item.label} onSelect={() => go(item.href)}>
                 <Icon className="size-4" />
-                {item.label}
+                {NAV_LABELS_AR[item.label] ?? item.label}
               </CommandItem>
             )
           })}

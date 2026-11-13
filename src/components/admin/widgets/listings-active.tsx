@@ -41,14 +41,14 @@ export async function ListingsActiveWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Active Listings ({total})</CardTitle>
+        <CardTitle className="text-[13px]">العقارات النشطة ({total})</CardTitle>
         <Link href="/admin/listings" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {listings.length === 0 ? (
-          <EmptyState icon={Building2} title="No active listings" className="py-8" />
+          <EmptyState icon={Building2} title="لا توجد عقارات نشطة" className="py-8" />
         ) : (
           <ul className="flex flex-col gap-1">
             {listings.map((listing) => (

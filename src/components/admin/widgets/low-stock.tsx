@@ -44,14 +44,14 @@ export async function LowStockWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Low Stock</CardTitle>
+        <CardTitle className="text-[13px]">مخزون منخفض</CardTitle>
         <Link href="/admin/inventory" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {lowStock.length === 0 ? (
-          <EmptyState icon={PackageX} title="All stocked up" className="py-8" />
+          <EmptyState icon={PackageX} title="المخزون متوفر" className="py-8" />
         ) : (
           <ul className="flex flex-col gap-1">
             {lowStock.map((product) => (
@@ -62,7 +62,7 @@ export async function LowStockWidget() {
                 >
                   <span className="truncate text-foreground">{product.name}</span>
                   <Badge variant={product.stock_qty === 0 ? 'destructive' : 'warning'}>
-                    {product.stock_qty} left
+                    {product.stock_qty} متبقية
                   </Badge>
                 </Link>
               </li>

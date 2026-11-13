@@ -41,19 +41,19 @@ export async function CodOutstandingWidget() {
   return (
     <Card className="gap-3 p-4">
       <div className="flex items-center justify-between">
-        <span className="text-[12px] font-medium text-muted-foreground">COD Outstanding</span>
+        <span className="text-[12px] font-medium text-muted-foreground">مبالغ الدفع عند الاستلام</span>
         <Banknote className="size-4 text-muted-foreground" />
       </div>
 
       <div className="flex flex-col gap-2">
         <div className="flex items-baseline justify-between">
-          <span className="text-xs text-muted-foreground">Not collected</span>
+          <span className="text-xs text-muted-foreground">غير محصّلة</span>
           <span className="text-[16px] font-semibold text-foreground tabular-nums">
             {formatCompact(outstanding, { symbol: true })}
           </span>
         </div>
         <div className="flex items-baseline justify-between border-t border-border pt-2">
-          <span className="text-xs text-muted-foreground">With riders</span>
+          <span className="text-xs text-muted-foreground">لدى المندوبين</span>
           <span className="text-[16px] font-semibold text-foreground tabular-nums">
             {formatCompact(withRiders, { symbol: true })}
           </span>
@@ -61,7 +61,7 @@ export async function CodOutstandingWidget() {
       </div>
 
       <Link href="/admin/cod" className="text-xs text-primary hover:underline">
-        View COD settlements
+        عرض تسويات الدفع عند الاستلام
       </Link>
     </Card>
   )

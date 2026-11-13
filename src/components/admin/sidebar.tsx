@@ -62,29 +62,29 @@ export function Sidebar({ org, orgs, nav, collapsed = false, onNavigate, onToggl
   const groups = React.useMemo(() => groupMainNav(nav.main), [nav.main])
   return (
     <div dir="rtl" className="flex h-full flex-col bg-sidebar">
-      <div className={cn('flex h-14 shrink-0 items-center border-b border-sidebar-border px-4', collapsed && 'justify-center px-0')}>
+      <div className={cn('flex h-16 shrink-0 items-center border-b border-sidebar-border px-4', collapsed && 'justify-center px-0')}>
         {collapsed ? (
-          <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">S</span>
+          <span className="flex size-8 items-center justify-center rounded-xl bg-primary text-sm font-bold text-primary-foreground">S</span>
         ) : (
-          <span className="flex items-center gap-2 text-base font-bold tracking-tight text-sidebar-foreground">
+          <span className="flex items-center gap-2 text-[17px] font-bold tracking-tight text-sidebar-foreground">
             <span className="flex size-8 items-center justify-center rounded-lg bg-primary text-sm font-bold text-primary-foreground">S</span>
             Sougify
           </span>
         )}
       </div>
-      <div className="border-b border-sidebar-border p-2">
+      <div className="border-b border-sidebar-border/80 p-3">
         <OrgSwitcher orgs={orgs} activeOrgId={org.id} activeOrgName={org.name} collapsed={collapsed} />
       </div>
-      <nav aria-label="القائمة الرئيسية" className="flex-1 overflow-y-auto px-2 py-3">
+      <nav aria-label="القائمة الرئيسية" className="flex-1 overflow-y-auto px-3 py-4">
         {dashboard && <NavLink item={dashboard} active={isActive(pathname, dashboard.href)} collapsed={collapsed} onNavigate={onNavigate} />}
-        <div className="mt-4 flex flex-col gap-0.5">
+        <div className="mt-5 flex flex-col gap-1">
           {groups.map((group) => group.items.length > 1 ? (
             <NavGroup key={group.key} label={labelAr(group.label)} items={group.items} pathname={pathname} collapsed={collapsed} onNavigate={onNavigate} />
           ) : (
             <NavLink key={group.items[0].href} item={group.items[0]} active={isActive(pathname, group.items[0].href)} collapsed={collapsed} onNavigate={onNavigate} />
           ))}
         </div>
-        <div className="mt-4 flex flex-col gap-0.5 border-t border-sidebar-border pt-3">
+        <div className="mt-5 flex flex-col gap-1 border-t border-sidebar-border/80 pt-4">
           {bottomCore.map((item) => <NavLink key={item.href} item={item} active={isActive(pathname, item.href)} collapsed={collapsed} onNavigate={onNavigate} />)}
         </div>
       </nav>
@@ -107,8 +107,8 @@ function NavLink({ item, active, collapsed, onNavigate, indent }: {
   const label = labelAr(item.label)
   const link = (
     <Link href={item.href} onClick={onNavigate}
-      className={cn('flex items-center gap-2.5 rounded-md px-2.5 py-2 text-[13px] font-medium transition-colors',
-        active ? 'bg-primary/10 text-primary' : 'text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-foreground',
+      className={cn('flex items-center gap-3 rounded-lg px-3 py-2.5 text-[13px] font-medium transition-colors',
+        active ? 'bg-primary/10 text-primary shadow-sm' : 'text-sidebar-foreground/75 hover:bg-sidebar-accent hover:text-sidebar-foreground',
         collapsed && 'justify-center px-0', indent && !collapsed && 'pr-8')}>
       <Icon className="size-4 shrink-0" />
       {!collapsed && <span className="truncate">{label}</span>}
@@ -126,7 +126,7 @@ function NavGroup({ label, items, pathname, collapsed, onNavigate }: {
   return (
     <div>
       <button type="button" onClick={() => setOpen((value) => !value)}
-        className={cn('flex w-full items-center justify-between rounded-md px-2.5 py-2 text-[11px] font-medium tracking-wide text-muted-foreground transition-colors hover:text-sidebar-foreground', hasActiveChild && 'text-sidebar-foreground')}>
+        className={cn('flex w-full items-center justify-between rounded-md px-2.5 py-2 text-[11px] font-semibold tracking-wide text-muted-foreground transition-colors hover:text-sidebar-foreground', hasActiveChild && 'text-sidebar-foreground')}>
         {label}<ChevronDown className={cn('size-3.5 transition-transform', !open && 'rotate-90')} />
       </button>
       {open && <div className="flex flex-col gap-0.5">{items.map((item) => <NavLink key={item.href} item={item} active={isActive(pathname, item.href)} collapsed={false} onNavigate={onNavigate} indent />)}</div>}

@@ -84,14 +84,14 @@ export default async function OrdersPage({ searchParams }: OrdersPageProps) {
   }))
 
   return (
-    <div className="px-6 py-6">
+    <div dir="rtl" className="flex flex-col gap-2">
       <PageHeader
-        title="Orders"
+        title="الطلبات" description="تابع الطلبات الجديدة، أكّدها، وراقب مراحل تجهيزها وتوصيلها."
         actions={
           <Button asChild size="sm">
             <Link href="/admin/orders/new">
               <Plus className="size-4" />
-              New order
+              طلب جديد
             </Link>
           </Button>
         }

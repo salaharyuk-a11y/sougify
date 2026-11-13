@@ -3,7 +3,6 @@
 import * as React from 'react'
 import { useRouter } from 'next/navigation'
 import type { ColumnDef } from '@tanstack/react-table'
-import { format } from 'date-fns'
 import { Circle, ShoppingCart } from 'lucide-react'
 import { toast } from 'sonner'
 
@@ -32,9 +31,9 @@ export interface OrderRow {
 }
 
 const CHANNEL_LABEL: Record<string, string> = {
-  storefront: 'Storefront',
-  pos: 'POS',
-  manual: 'Manual',
+  storefront: 'واجهة المتجر',
+  pos: 'نقطة البيع',
+  manual: 'يدوي',
 }
 
 interface OrdersTableProps {
@@ -78,9 +77,9 @@ function OrdersTable({ data }: OrdersTableProps) {
       )
       const failed = results.filter((r) => !r.ok).length
       if (failed > 0) {
-        toast.error(`${failed} of ${ids.length} order(s) could not be confirmed`)
+        toast.error(`تعذر تأكيد ${failed} من أصل ${ids.length} طلب`)
       } else {
-        toast.success(`${ids.length} order(s) confirmed`)
+        toast.success(`تم تأكيد ${ids.length} طلب`)
       }
       setSelected(new Set())
       router.refresh()
@@ -97,7 +96,7 @@ function OrdersTable({ data }: OrdersTableProps) {
           <Checkbox
             checked={data.length > 0 && selected.size === data.length}
             onCheckedChange={(v) => toggleAll(Boolean(v))}
-            aria-label="Select all"
+            aria-label="تحديد الكل"
           />
         ),
         cell: ({ row }) => (
@@ -105,24 +104,24 @@ function OrdersTable({ data }: OrdersTableProps) {
             checked={selected.has(row.original.id)}
             onCheckedChange={(v) => toggleOne(row.original.id, Boolean(v))}
             onClick={(e) => e.stopPropagation()}
-            aria-label="Select row"
+            aria-label="تحديد الطلب"
           />
         ),
         enableSorting: false,
       },
       {
         accessorKey: 'order_no',
-        header: 'Order',
+        header: 'رقم الطلب',
         cell: ({ row }) => <span className="font-medium">{row.original.order_no}</span>,
       },
       {
         accessorKey: 'placed_at',
-        header: 'Placed',
-        cell: ({ row }) => format(new Date(row.original.placed_at), 'd MMM, h:mm a'),
+        header: 'تاريخ الطلب',
+        cell: ({ row }) => new Intl.DateTimeFormat('ar-DZ', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }).format(new Date(row.original.placed_at)),
       },
       {
         id: 'customer',
-        header: 'Customer',
+        header: 'العميل',
         cell: ({ row }) => (
           <div className="flex flex-col">
             <span>{row.original.customer_name}</span>
@@ -132,27 +131,27 @@ function OrdersTable({ data }: OrdersTableProps) {
       },
       {
         accessorKey: 'channel',
-        header: 'Channel',
+        header: 'المصدر',
         cell: ({ row }) => <Badge variant="outline">{CHANNEL_LABEL[row.original.channel] ?? row.original.channel}</Badge>,
       },
       {
         accessorKey: 'items_count',
-        header: 'Items',
+        header: 'المنتجات',
         cell: ({ row }) => <span className="tabular-nums">{row.original.items_count}</span>,
       },
       {
         accessorKey: 'total',
-        header: 'Total',
+        header: 'الإجمالي',
         cell: ({ row }) => <span className="tabular-nums">{formatMoney(row.original.total)}</span>,
       },
       {
         accessorKey: 'payment_status',
-        header: 'Payment',
+        header: 'الدفع',
         cell: ({ row }) => <StatusBadge kind="payment" value={row.original.payment_status} />,
       },
       {
         accessorKey: 'status',
-        header: 'Status',
+        header: 'الحالة',
         cell: ({ row }) => (
           <div className="flex items-center gap-1.5">
             {row.original.risk_level === 'high' || row.original.risk_level === 'medium' ? (
@@ -179,12 +178,12 @@ function OrdersTable({ data }: OrdersTableProps) {
       pageSize={50}
       onRowClick={(row) => router.push(`/admin/orders/${row.id}`)}
       emptyState={
-        <EmptyState icon={ShoppingCart} title="No orders found" description="Try a different filter or date range." />
+        <EmptyState icon={ShoppingCart} title="لا توجد طلبات" description="جرّب تغيير عوامل التصفية أو نطاق التاريخ." />
       }
       toolbar={
         selected.size > 0 ? (
           <Button size="sm" onClick={bulkConfirm} disabled={bulkBusy}>
-            {bulkBusy ? 'Confirming…' : `Confirm ${selected.size} selected`}
+            {bulkBusy ? 'جارٍ التأكيد…' : `تأكيد ${selected.size} طلب`}
           </Button>
         ) : undefined
       }

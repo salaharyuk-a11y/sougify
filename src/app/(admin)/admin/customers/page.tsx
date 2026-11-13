@@ -23,10 +23,10 @@ export default async function CustomersPage() {
   const customers = (data ?? []) as Customer[]
 
   return (
-    <div className="px-6 py-6">
+    <div dir="rtl" className="flex flex-col gap-2">
       <PageHeader
-        title="Customers"
-        description="Customer profiles, order history, and blocklist."
+        title="العملاء"
+        description="إدارة بيانات العملاء، متابعة سجل مشترياتهم، ومراجعة الحسابات المحظورة."
         actions={<NewCustomerDialog />}
       />
       <CustomersTable customers={customers} />

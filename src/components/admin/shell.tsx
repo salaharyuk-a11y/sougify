@@ -56,11 +56,11 @@ export function AdminShell({ org, role, nav, orgs, user, unreadCount, children }
   return (
     <>
       <ThemeScript />
-      <div className="flex h-dvh overflow-hidden bg-background">
+      <div dir="rtl" className="flex h-dvh overflow-hidden bg-background">
         <aside
           className={cn(
-            'hidden shrink-0 border-r border-sidebar-border transition-[width] duration-150 md:flex',
-            isCollapsed ? 'w-16' : 'w-[232px]',
+            'hidden shrink-0 border-l border-sidebar-border bg-sidebar transition-[width] duration-200 md:flex',
+            isCollapsed ? 'w-[72px]' : 'w-[260px]',
           )}
         >
           <Sidebar
@@ -73,7 +73,7 @@ export function AdminShell({ org, role, nav, orgs, user, unreadCount, children }
         </aside>
 
         <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-          <SheetContent side="left" className="w-[232px] p-0 sm:max-w-[232px]">
+          <SheetContent side="right" className="w-[280px] p-0 sm:max-w-[280px]">
             <SheetTitle className="sr-only">Navigation</SheetTitle>
             <SheetDescription className="sr-only">Admin navigation menu</SheetDescription>
             <Sidebar org={org} orgs={orgs} nav={nav} onNavigate={() => setMobileOpen(false)} />
@@ -89,8 +89,8 @@ export function AdminShell({ org, role, nav, orgs, user, unreadCount, children }
             onMenuClick={() => setMobileOpen(true)}
             onSearchClick={() => setCommandOpen(true)}
           />
-          <main className="flex-1 overflow-y-auto px-6 py-5">
-            <div className="mx-auto w-full max-w-[1400px]">{children}</div>
+          <main dir="rtl" className="flex-1 overflow-y-auto px-4 py-6 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-[1600px]">{children}</div>
           </main>
         </div>
       </div>

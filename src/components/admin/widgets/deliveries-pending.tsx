@@ -46,14 +46,14 @@ export async function DeliveriesPendingWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Deliveries Pending</CardTitle>
+        <CardTitle className="text-[13px]">الشحنات قيد التنفيذ</CardTitle>
         <Link href="/admin/deliveries" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="flex flex-col gap-3 p-0">
         {rows.length === 0 ? (
-          <EmptyState icon={Truck} title="No active deliveries" className="py-8" />
+          <EmptyState icon={Truck} title="لا توجد شحنات نشطة" className="py-8" />
         ) : (
           <>
             <div className="flex flex-wrap gap-3">
@@ -74,7 +74,7 @@ export async function DeliveriesPendingWidget() {
                     className="flex items-center justify-between gap-2 rounded-md px-1.5 py-1 text-[13px] transition-colors hover:bg-accent"
                   >
                     <span className="truncate text-foreground">
-                      {delivery.delivery_no} · {delivery.recipient_name ?? 'Unknown'}
+                      {delivery.delivery_no} · {delivery.recipient_name ?? 'غير معروف'}
                     </span>
                     <StatusBadge kind="delivery" value={delivery.status} />
                   </Link>

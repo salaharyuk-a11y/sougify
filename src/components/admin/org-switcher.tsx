@@ -45,7 +45,7 @@ export function OrgSwitcher({ orgs, activeOrgId, activeOrgName, collapsed = fals
       <DropdownMenuTrigger
         disabled={isPending}
         className={cn(
-          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition-colors hover:bg-sidebar-accent disabled:opacity-60',
+          'flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-right transition-colors hover:bg-sidebar-accent disabled:opacity-60',
           collapsed && 'justify-center px-0',
         )}
       >
@@ -76,7 +76,7 @@ export function OrgSwitcher({ orgs, activeOrgId, activeOrgName, collapsed = fals
         <DropdownMenuItem asChild>
           <Link href="/onboarding" className="gap-2">
             <Plus className="size-4" />
-            Create organization
+            إضافة مؤسسة
           </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>

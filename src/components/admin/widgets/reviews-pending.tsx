@@ -38,14 +38,14 @@ export async function ReviewsPendingWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Reviews Pending ({reviews.length})</CardTitle>
+        <CardTitle className="text-[13px]">التقييمات بانتظار المراجعة ({reviews.length})</CardTitle>
         <Link href="/admin/reviews" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {reviews.length === 0 ? (
-          <EmptyState icon={Star} title="Nothing to moderate" className="py-8" />
+          <EmptyState icon={Star} title="لا توجد تقييمات للمراجعة" className="py-8" />
         ) : (
           <ul className="flex flex-col gap-1">
             {reviews.map((review) => (

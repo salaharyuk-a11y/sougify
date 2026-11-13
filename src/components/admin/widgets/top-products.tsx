@@ -48,14 +48,14 @@ export async function TopProductsWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">Top Products (30d)</CardTitle>
+        <CardTitle className="text-[13px]">أفضل المنتجات (30 يوماً)</CardTitle>
         <Link href="/admin/reports" className="text-xs text-primary hover:underline">
-          Reports
+          التقارير
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {top5.length === 0 ? (
-          <EmptyState icon={BarChart3} title="No sales yet" className="py-8" />
+          <EmptyState icon={BarChart3} title="لا توجد مبيعات بعد" className="py-8" />
         ) : (
           <MiniBarChart data={top5} height={120} formatValue={(value) => formatCompact(value, { symbol: true })} />
         )}
