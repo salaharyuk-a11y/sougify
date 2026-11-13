@@ -120,12 +120,21 @@ export default async function AdminDashboardPage() {
 
   return (
     <div dir="rtl" className="flex flex-col gap-6">
-      <div className="flex flex-col gap-1">
+      <section className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 sm:p-6">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <div className="flex flex-col gap-1">
         <h1 className="text-[20px] font-semibold tracking-tight text-foreground">
           {greeting}, {firstName}
         </h1>
-        <p className="text-sm text-muted-foreground">{today}</p>
-      </div>
+        <p className="text-sm text-muted-foreground">{today} · إليك ملخص نشاط متجرك.</p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2">
+            <Link href="/admin/orders/new" className="inline-flex h-9 items-center gap-2 rounded-md bg-primary px-3 text-xs font-medium text-primary-foreground transition-colors hover:bg-primary/90"><ShoppingBag className="size-4" /> طلب جديد</Link>
+            <Link href="/admin/products/new" className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground transition-colors hover:bg-muted"><PackagePlus className="size-4" /> إضافة منتج</Link>
+            <Link href="/admin/customers" className="inline-flex h-9 items-center gap-2 rounded-md border border-border bg-background px-3 text-xs font-medium text-foreground transition-colors hover:bg-muted"><Users className="size-4" /> العملاء <ArrowUpLeft className="size-3" /></Link>
+          </div>
+        </div>
+      </section>
 
       {orderedIds.length === 0 ? (
         <EmptyState
