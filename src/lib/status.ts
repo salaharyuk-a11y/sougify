@@ -49,8 +49,22 @@ export interface StatusMeta {
   variant: StatusVariant
 }
 
+const STATUS_LABELS_AR: Record<string, string> = {
+  pending: 'قيد الانتظار', confirmed: 'مؤكد', packed: 'قيد التجهيز',
+  dispatched: 'خرج للتوصيل', delivered: 'تم التوصيل', completed: 'مكتمل',
+  cancelled: 'ملغى', returned: 'مُرجع', failed: 'فشل', verified: 'تم التحقق',
+  unpaid: 'غير مدفوع', advance_paid: 'دُفع عربون', paid: 'مدفوع',
+  partial_refund: 'استرداد جزئي', assigned: 'تم التعيين', picked_up: 'تم الاستلام',
+  in_transit: 'في الطريق', archived: 'مؤرشف', requested: 'مطلوب',
+  approved: 'مقبول', rejected: 'مرفوض', refunded: 'تم الاسترداد',
+  quoted: 'تم تقديم عرض', scheduled: 'مجدول', in_progress: 'قيد التنفيذ',
+  done: 'منجز', invoiced: 'تم إصدار الفاتورة', draft: 'مسودة',
+  active: 'نشط', under_offer: 'قيد التفاوض', sold: 'مباع', rented: 'مؤجر',
+  published: 'منشور', revoked: 'ملغى',
+}
+
 function titleCase(value: string): string {
-  return value
+  return STATUS_LABELS_AR[value] ?? value
     .split('_')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
