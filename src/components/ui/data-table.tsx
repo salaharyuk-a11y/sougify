@@ -167,7 +167,7 @@ function DataTable<TData, TValue>({
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            Previous
+            السابق
           </Button>
           <span>
             صفحة {table.getState().pagination.pageIndex + 1} من{" "}
@@ -179,7 +179,7 @@ function DataTable<TData, TValue>({
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            Next
+            التالي
           </Button>
         </div>
       </div>
