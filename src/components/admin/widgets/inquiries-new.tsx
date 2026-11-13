@@ -39,14 +39,14 @@ export async function InquiriesNewWidget() {
   return (
     <Card className="gap-3 p-4">
       <CardHeader className="flex-row items-center justify-between gap-2 p-0">
-        <CardTitle className="text-[13px]">New Inquiries</CardTitle>
+        <CardTitle className="text-[13px]">استفسارات جديدة</CardTitle>
         <Link href="/admin/listings" className="text-xs text-primary hover:underline">
-          View all
+          عرض الكل
         </Link>
       </CardHeader>
       <CardContent className="p-0">
         {inquiries.length === 0 ? (
-          <EmptyState icon={Inbox} title="No new inquiries" className="py-8" />
+          <EmptyState icon={Inbox} title="لا توجد استفسارات جديدة" className="py-8" />
         ) : (
           <ul className="flex flex-col gap-2">
             {inquiries.map((inquiry) => (
