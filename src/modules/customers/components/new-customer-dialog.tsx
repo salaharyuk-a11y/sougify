@@ -46,7 +46,7 @@ export function NewCustomerDialog() {
       toast.error(result.error)
       return
     }
-    toast.success('Customer created')
+    toast.success('تمت إضافة العميل بنجاح')
     setOpen(false)
     form.reset()
     router.refresh()
@@ -68,7 +68,7 @@ export function NewCustomerDialog() {
       </DialogTrigger>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>New customer</DialogTitle>
+          <DialogTitle>إضافة عميل جديد</DialogTitle>
         </DialogHeader>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -77,9 +77,9 @@ export function NewCustomerDialog() {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>الاسم الكامل</FormLabel>
                   <FormControl>
-                    <Input placeholder="Customer name" {...field} />
+                    <Input placeholder="أدخل اسم العميل" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -90,9 +90,9 @@ export function NewCustomerDialog() {
               name="phone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Phone</FormLabel>
+                  <FormLabel>رقم الهاتف</FormLabel>
                   <FormControl>
-                    <Input placeholder="01xxxxxxxxx" {...field} />
+                    <Input placeholder="05xxxxxxxx" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -103,7 +103,7 @@ export function NewCustomerDialog() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email (optional)</FormLabel>
+                  <FormLabel>البريد الإلكتروني (اختياري)</FormLabel>
                   <FormControl>
                     <Input type="email" placeholder="name@example.com" {...field} />
                   </FormControl>
@@ -113,16 +113,16 @@ export function NewCustomerDialog() {
             />
 
             <div className="border-t pt-3">
-              <p className="text-muted-foreground mb-2 text-xs font-medium">Address (optional)</p>
+              <p className="text-muted-foreground mb-2 text-xs font-medium">العنوان (اختياري)</p>
               <div className="grid grid-cols-2 gap-3">
                 <FormField
                   control={form.control}
                   name="address.line1"
                   render={({ field }) => (
                     <FormItem className="col-span-2">
-                      <FormLabel>Address line</FormLabel>
+                      <FormLabel>العنوان</FormLabel>
                       <FormControl>
-                        <Input placeholder="House, road, area" {...field} />
+                        <Input placeholder="الحي والشارع ورقم المنزل" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -133,7 +133,7 @@ export function NewCustomerDialog() {
                   name="address.area"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Area</FormLabel>
+                      <FormLabel>المنطقة</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -146,11 +146,11 @@ export function NewCustomerDialog() {
                   name="address.district"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>District</FormLabel>
+                      <FormLabel>الولاية / المنطقة</FormLabel>
                       <Select value={field.value || undefined} onValueChange={field.onChange}>
                         <FormControl>
                           <SelectTrigger className="w-full">
-                            <SelectValue placeholder="Select district" />
+                            <SelectValue placeholder="اختر المنطقة" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -170,7 +170,7 @@ export function NewCustomerDialog() {
                   name="address.postcode"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Postcode</FormLabel>
+                      <FormLabel>الرمز البريدي</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -183,7 +183,7 @@ export function NewCustomerDialog() {
 
             <DialogFooter>
               <Button type="submit" disabled={form.formState.isSubmitting}>
-                {form.formState.isSubmitting ? 'Creating...' : 'Create customer'}
+                {form.formState.isSubmitting ? 'جارٍ الحفظ...' : 'حفظ العميل'}
               </Button>
             </DialogFooter>
           </form>
