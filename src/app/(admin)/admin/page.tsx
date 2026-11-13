@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
-import { LayoutDashboard } from 'lucide-react'
+import { ArrowUpLeft, LayoutDashboard, PackagePlus, ShoppingBag, Users } from 'lucide-react'
+import Link from 'next/link'
 
 import { requireOrg } from '@/lib/auth'
 import { getServerClient } from '@/lib/supabase/server'
@@ -96,7 +97,7 @@ function greetingFor(hour: number): string {
 export default async function AdminDashboardPage() {
   const ctx = await requireOrg()
 
-  let firstName = ctx.user.email?.split('@')[0] ?? 'there'
+  let firstName = ctx.user.email?.split('@')[0] ?? 'مرحباً'
   try {
     const supabase = await getServerClient()
     const { data } = await supabase
