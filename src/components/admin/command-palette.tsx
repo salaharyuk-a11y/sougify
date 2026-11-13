@@ -98,7 +98,7 @@ export function CommandPalette({ open, onOpenChange, nav, enabledModules }: Comm
             return (
               <CommandItem key={item.href} value={item.label} onSelect={() => go(item.href)}>
                 <Icon className="size-4" />
-                {item.label}
+                {NAV_LABELS_AR[item.label] ?? item.label}
               </CommandItem>
             )
           })}
